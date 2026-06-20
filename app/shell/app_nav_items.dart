@@ -1,0 +1,99 @@
+import 'package:fluent_ui/fluent_ui.dart';
+import '../router/route_names.dart';
+import 'app_nav_item.dart';
+
+abstract class AppNavItems {
+  static const List<AppNavItem> main = [
+    AppNavItem(
+      key: 'dashboard',
+      label: 'Dashboard',
+      route: RouteNames.dashboard,
+      icon: FluentIcons.view_dashboard,
+    ),
+    AppNavItem(
+      key: 'trading',
+      label: 'Trading',
+      route: RouteNames.trading,
+      icon: FluentIcons.switch_widget,
+    ),
+    AppNavItem(
+      key: 'guardrails',
+      label: 'Guardrails',
+      route: RouteNames.guardrails,
+      icon: FluentIcons.shield,
+    ),
+    AppNavItem(
+      key: 'journal',
+      label: 'Journal',
+      route: RouteNames.journal,
+      icon: FluentIcons.edit_note,
+    ),
+    AppNavItem(
+      key: 'analytics',
+      label: 'Analytics',
+      route: RouteNames.analytics,
+      icon: FluentIcons.chart,
+    ),
+    AppNavItem(
+      key: 'plan',
+      label: 'Plan',
+      route: RouteNames.plan,
+      icon: FluentIcons.task_manager,
+    ),
+    AppNavItem(
+      key: 'notebook',
+      label: 'Notebook',
+      route: RouteNames.notebook,
+      icon: FluentIcons.memo,
+    ),
+    AppNavItem(
+      key: 'sanctuary',
+      label: 'Sanctuary',
+      route: RouteNames.sanctuary,
+      icon: FluentIcons.heart,
+    ),
+    AppNavItem(
+      key: 'news',
+      label: 'News',
+      route: RouteNames.news,
+      icon: FluentIcons.news,
+    ),
+    AppNavItem(
+      key: 'floai',
+      label: 'FloAI',
+      route: RouteNames.floai,
+      icon: FluentIcons.robot,
+    ),
+  ];
+
+  static const List<AppNavItem> utilities = [
+    AppNavItem(
+      key: 'collapse',
+      label: 'Collapse',
+      route: '/collapse',
+      icon: FluentIcons.double_chevron_left_med,
+      isUtility: true,
+    ),
+    AppNavItem(
+      key: 'theme',
+      label: 'Theme',
+      route: '/theme',
+      icon: FluentIcons.clear_night,
+      isUtility: true,
+    ),
+    AppNavItem(
+      key: 'notifications',
+      label: 'Notifications',
+      route: '/notifications',
+      icon: FluentIcons.ringer,
+      isUtility: true,
+    ),
+    AppNavItem(
+      key: 'settings',
+      label: 'Settings',
+      route: '/settings',
+      icon: FluentIcons.settings,
+      isUtility: true,
+    ),
+  ];
+}
