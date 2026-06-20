@@ -7,12 +7,19 @@ class RecentTradesTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
-      padding: const EdgeInsets.all(14),
+      height: 310,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: const Color(0xFFEEE8F8)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x12000000),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,20 +46,44 @@ class RecentTradesTable extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          const Row(
-            children: [
-              Expanded(flex: 2, child: _Header('Instrument')),
-              Expanded(child: _Header('Direction')),
-              Expanded(child: _Header('P/L')),
-              Expanded(child: _Header('Outcome')),
-              Expanded(flex: 2, child: _Header('Closed At')),
-            ],
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF7F4FF),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Row(
+              children: [
+                Expanded(flex: 2, child: _Header('Instrument')),
+                Expanded(child: _Header('Direction')),
+                Expanded(child: _Header('P/L')),
+                Expanded(child: _Header('Outcome')),
+                Expanded(flex: 2, child: _Header('Closed At')),
+              ],
+            ),
           ),
-          const SizedBox(height: 6),
-          const Divider(style: DividerThemeData(thickness: 1)),
-          const _TradeRow('EURUSD', 'Sell', r'-$1,500.00', 'Loss', 'Today, 11:15 AM'),
-          const _TradeRow('GBPJPY', 'Sell', r'-$1,250.00', 'Loss', 'Today, 10:48 AM'),
-          const _TradeRow('XAUUSD', 'Sell', r'-$600.00', 'Loss', 'Today, 10:05 AM'),
+          const SizedBox(height: 8),
+          const _TradeRow(
+            'EURUSD',
+            'Sell',
+            r'-$1,500.00',
+            'Loss',
+            'Today, 11:15 AM',
+          ),
+          const _TradeRow(
+            'GBPJPY',
+            'Sell',
+            r'-$1,250.00',
+            'Loss',
+            'Today, 10:48 AM',
+          ),
+          const _TradeRow(
+            'XAUUSD',
+            'Sell',
+            r'-$600.00',
+            'Loss',
+            'Today, 10:05 AM',
+          ),
           const _TradeRow('AUDUSD', 'Buy', r'+$64.60', 'Win', 'Today, 9:42 AM'),
           const _TradeRow('USDCAD', 'Sell', r'$0.00', 'BE', 'Today, 9:12 AM'),
         ],
@@ -109,10 +140,7 @@ class _TradeRow extends StatelessWidget {
               children: [
                 const _PairDot(),
                 const SizedBox(width: 8),
-                Text(
-                  instrument,
-                  style: const TextStyle(fontSize: 11),
-                ),
+                Text(instrument, style: const TextStyle(fontSize: 11)),
               ],
             ),
           ),
@@ -134,8 +162,8 @@ class _TradeRow extends StatelessWidget {
                 color: pnl.startsWith('+')
                     ? AppColors.success
                     : pnl.startsWith('-')
-                        ? AppColors.danger
-                        : AppColors.textPrimary,
+                    ? AppColors.danger
+                    : AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -144,14 +172,13 @@ class _TradeRow extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: isWin
                       ? const Color(0xFFEAF8F1)
                       : isLoss
-                          ? const Color(0xFFFFEEEE)
-                          : const Color(0xFFF1F1F4),
+                      ? const Color(0xFFFFEEEE)
+                      : const Color(0xFFF1F1F4),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -162,8 +189,8 @@ class _TradeRow extends StatelessWidget {
                     color: isWin
                         ? AppColors.success
                         : isLoss
-                            ? AppColors.danger
-                            : AppColors.textSecondary,
+                        ? AppColors.danger
+                        : AppColors.textSecondary,
                   ),
                 ),
               ),

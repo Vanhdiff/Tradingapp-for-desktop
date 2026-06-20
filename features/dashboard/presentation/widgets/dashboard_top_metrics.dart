@@ -11,14 +11,14 @@ class DashboardTopMetrics extends StatelessWidget {
         Expanded(
           child: _SummaryMetricCard(
             title: 'ACCOUNT BALANCE',
-            value: '18,427.59',
+            value: '\$18,427.59',
           ),
         ),
         SizedBox(width: 12),
         Expanded(
           child: _SummaryMetricCard(
             title: 'TOTAL CLOSED PnL',
-            value: '3,285.40',
+            value: '-\$3,285.40',
             valueColor: AppColors.danger,
           ),
         ),
@@ -27,11 +27,7 @@ class DashboardTopMetrics extends StatelessWidget {
           child: _SummaryMetricCard(
             title: 'WIN RATE',
             value: '28.21%',
-            trailing: Icon(
-              FluentIcons.down,
-              size: 12,
-              color: AppColors.danger,
-            ),
+            trailing: Icon(FluentIcons.down, size: 12, color: AppColors.danger),
           ),
         ),
         SizedBox(width: 12),
@@ -63,8 +59,15 @@ class _SummaryMetricCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFEEE8F8)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x11000000),
+            blurRadius: 22,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,10 +91,7 @@ class _SummaryMetricCard extends StatelessWidget {
                   color: valueColor ?? AppColors.textPrimary,
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 4),
-                trailing!,
-              ],
+              if (trailing != null) ...[const SizedBox(width: 4), trailing!],
             ],
           ),
         ],
@@ -110,8 +110,15 @@ class _AvgRMetricCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFEEE8F8)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x11000000),
+            blurRadius: 22,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,8 +202,15 @@ class _ProfitFactorCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFEEE8F8)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x11000000),
+            blurRadius: 22,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -224,11 +238,7 @@ class _ProfitFactorCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 4),
-                    Icon(
-                      FluentIcons.info,
-                      size: 10,
-                      color: AppColors.warning,
-                    ),
+                    Icon(FluentIcons.info, size: 10, color: AppColors.warning),
                   ],
                 ),
               ],
@@ -250,9 +260,7 @@ class _MiniGauge extends StatelessWidget {
     return SizedBox(
       width: 34,
       height: 34,
-      child: CustomPaint(
-        painter: _MiniGaugePainter(),
-      ),
+      child: CustomPaint(painter: _MiniGaugePainter()),
     );
   }
 }

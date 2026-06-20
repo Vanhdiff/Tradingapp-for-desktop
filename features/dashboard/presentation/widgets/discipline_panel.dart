@@ -8,12 +8,19 @@ class DisciplinePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      height: 330,
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: const Color(0xFFEEE8F8)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x12000000),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,21 +30,23 @@ class DisciplinePanel extends StatelessWidget {
               const Text(
                 'Discipline breakdown',
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
               const Icon(
                 FluentIcons.info,
-                size: 10,
+                size: 14,
                 color: AppColors.textSecondary,
               ),
               const Spacer(),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF4DF),
                   borderRadius: BorderRadius.circular(999),
@@ -45,7 +54,7 @@ class DisciplinePanel extends StatelessWidget {
                 child: const Text(
                   'Developing Trader',
                   style: TextStyle(
-                    fontSize: 8.5,
+                    fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: AppColors.warning,
                   ),
@@ -53,30 +62,72 @@ class DisciplinePanel extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Expanded(
-                child: Column(
-                  children: [
-                    _MetricRow('Performance', '26/40', 0.65, AppColors.primary),
-                    SizedBox(height: 8),
-                    _MetricRow('Discipline', '23/30', 0.76, AppColors.primary),
-                    SizedBox(height: 8),
-                    _StatRow('Max Daily Loss Violations', '1 / 2'),
-                    SizedBox(height: 6),
-                    _StatRow('Profit Target Violations', '1 / 2'),
-                    SizedBox(height: 6),
-                    _StatRow('Not exceeding max trades', '✓'),
-                    SizedBox(height: 8),
-                    _MetricRow('Consistency', '6/20', 0.30, Color(0xFFE96AA9)),
-                  ],
+          const SizedBox(height: 16),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _MetricRow(
+                        'Performance',
+                        '26/40',
+                        0.65,
+                        AppColors.success,
+                      ),
+                      const SizedBox(height: 16),
+                      const _MetricRow(
+                        'Discipline',
+                        '32/40',
+                        0.78,
+                        AppColors.primary,
+                      ),
+                      const SizedBox(height: 18),
+                      _StatRow(
+                        'Max Daily Loss Violations',
+                        '1 / 2',
+                        trailing: const Icon(
+                          FluentIcons.chevron_down_small,
+                          size: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      _StatRow(
+                        'Profit Target Violations',
+                        '1 / 2',
+                        trailing: const Icon(
+                          FluentIcons.chevron_down_small,
+                          size: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      _StatRow(
+                        'Not exceeding max trades',
+                        '✓',
+                        trailing: const Icon(
+                          FluentIcons.check_mark,
+                          size: 12,
+                          color: AppColors.success,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      const _MetricRow(
+                        'Consistency',
+                        '6/20',
+                        0.30,
+                        Color(0xFFE96AA9),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: 10),
-              _ScoreRing(score: 64),
-            ],
+                const SizedBox(width: 16),
+                const _ScoreColumn(),
+              ],
+            ),
           ),
         ],
       ),
@@ -95,6 +146,7 @@ class _MetricRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -102,8 +154,8 @@ class _MetricRow extends StatelessWidget {
               child: Text(
                 label,
                 style: const TextStyle(
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -111,21 +163,22 @@ class _MetricRow extends StatelessWidget {
             Text(
               score,
               style: const TextStyle(
-                fontSize: 9,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(width: 4),
             const Icon(
               FluentIcons.chevron_down_small,
-              size: 10,
+              size: 12,
               color: AppColors.textSecondary,
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Container(
-          height: 4,
+          height: 6,
           decoration: BoxDecoration(
             color: const Color(0xFFF2EEF8),
             borderRadius: BorderRadius.circular(999),
@@ -151,8 +204,9 @@ class _MetricRow extends StatelessWidget {
 class _StatRow extends StatelessWidget {
   final String label;
   final String value;
+  final Widget? trailing;
 
-  const _StatRow(this.label, this.value);
+  const _StatRow(this.label, this.value, {this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +216,7 @@ class _StatRow extends StatelessWidget {
           child: Text(
             label,
             style: const TextStyle(
-              fontSize: 9.5,
+              fontSize: 10,
               color: AppColors.textSecondary,
             ),
           ),
@@ -170,16 +224,39 @@ class _StatRow extends StatelessWidget {
         Text(
           value,
           style: const TextStyle(
-            fontSize: 9.5,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(width: 4),
-        const Icon(
-          FluentIcons.chevron_down_small,
-          size: 10,
-          color: AppColors.textSecondary,
+        if (trailing != null) ...[const SizedBox(width: 6), trailing!],
+      ],
+    );
+  }
+}
+
+class _ScoreColumn extends StatelessWidget {
+  const _ScoreColumn();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: const [
+        _ScoreRing(score: 64),
+        SizedBox(height: 12),
+        SizedBox(
+          width: 90,
+          child: Text(
+            "6 more points to get 'Consistent Trader'",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 10,
+              color: AppColors.textSecondary,
+              height: 1.3,
+            ),
+          ),
         ),
       ],
     );
@@ -194,8 +271,8 @@ class _ScoreRing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 74,
-      height: 74,
+      width: 86,
+      height: 86,
       child: CustomPaint(
         painter: _ScoreRingPainter(score / 100),
         child: Center(
@@ -205,17 +282,14 @@ class _ScoreRing extends StatelessWidget {
               Text(
                 '$score',
                 style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
                 ),
               ),
               const Text(
                 '/100',
-                style: TextStyle(
-                  fontSize: 8.5,
-                  color: AppColors.textSecondary,
-                ),
+                style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
               ),
             ],
           ),
@@ -232,7 +306,7 @@ class _ScoreRingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const stroke = 6.0;
+    const stroke = 8.0;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - stroke) / 2;
 

@@ -19,20 +19,23 @@ class DashboardPage extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            height: 34,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               color: const Color(0xFFFFF2F5),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(color: const Color(0xFFF2E2E8)),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0x11000000),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Row(
               children: const [
-                Icon(
-                  FluentIcons.info,
-                  size: 12,
-                  color: Color(0xFFE38AAA),
-                ),
+                Icon(FluentIcons.info, size: 12, color: Color(0xFFE38AAA)),
                 SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -51,30 +54,18 @@ class DashboardPage extends StatelessWidget {
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 8,
-                child: EquityChart(),
-              ),
+              Expanded(flex: 8, child: EquityChart()),
               SizedBox(width: 12),
-              Expanded(
-                flex: 4,
-                child: DisciplinePanel(),
-              ),
+              Expanded(flex: 4, child: DisciplinePanel()),
             ],
           ),
           const SizedBox(height: 10),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 8,
-                child: RecentTradesTable(),
-              ),
+              Expanded(flex: 8, child: RecentTradesTable()),
               SizedBox(width: 12),
-              Expanded(
-                flex: 4,
-                child: RuleBreakPanel(),
-              ),
+              Expanded(flex: 4, child: RuleBreakPanel()),
             ],
           ),
         ],
