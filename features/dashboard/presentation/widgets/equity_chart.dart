@@ -113,10 +113,7 @@ class _CompactChartPainter extends CustomPainter {
     for (int i = 0; i < yLabels.length; i++) {
       final y = chartHeight * i / 3;
       final tp = TextPainter(
-        text: TextSpan(
-          text: yLabels[i],
-          style: textStyle,
-        ),
+        text: TextSpan(text: yLabels[i], style: textStyle),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(0, y - 5));
@@ -126,10 +123,7 @@ class _CompactChartPainter extends CustomPainter {
     for (int i = 0; i < xLabels.length; i++) {
       final x = leftPad + chartWidth * i / (xLabels.length - 1);
       final tp = TextPainter(
-        text: TextSpan(
-          text: xLabels[i],
-          style: textStyle,
-        ),
+        text: TextSpan(text: xLabels[i], style: textStyle),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(x - tp.width / 2, chartHeight + 4));
@@ -179,21 +173,14 @@ class _CompactChartPainter extends CustomPainter {
       ..shader = const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [
-          Color(0x3333C981),
-          Color(0x11F5A14B),
-          Color(0x00FFFFFF),
-        ],
+        colors: [Color(0x3333C981), Color(0x11F5A14B), Color(0x00FFFFFF)],
       ).createShader(Rect.fromLTWH(leftPad, 0, chartWidth, chartHeight));
 
     canvas.drawPath(fillPath, fillPaint);
 
     final linePaint = Paint()
       ..shader = const LinearGradient(
-        colors: [
-          Color(0xFFFF8D3D),
-          Color(0xFF2FC97C),
-        ],
+        colors: [Color(0xFFFF8D3D), Color(0xFF2FC97C)],
       ).createShader(Rect.fromLTWH(leftPad, 0, chartWidth, chartHeight))
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.1;
@@ -204,7 +191,7 @@ class _CompactChartPainter extends CustomPainter {
   List<String> _buildYLabels() {
     switch (mode) {
       case ChartMetricMode.currency:
-        return [r'\$20K', r'\$15K', r'\$10K', r'\$5K'];
+        return [r'$20K', r'$15K', r'$10K', r'$5K'];
       case ChartMetricMode.rMultiple:
         return ['4R', '3R', '2R', '1R'];
       case ChartMetricMode.percent:
