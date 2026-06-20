@@ -31,10 +31,10 @@ class ShellNavItem extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 16,
+                size: 18,
                 color: selected ? AppColors.primary : AppColors.textSecondary,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Text(
                 label,
                 style: TextStyle(

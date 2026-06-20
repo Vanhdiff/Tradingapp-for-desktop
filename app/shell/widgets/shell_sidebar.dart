@@ -111,24 +111,22 @@ class _SidebarIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Tooltip(
         message: item.label,
         child: GestureDetector(
           onTap: onTap,
           child: Container(
-            width: 28,
-            height: 28,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
               color: selected ? AppColors.primarySoft : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               item.icon,
-              size: 13,
-              color: selected
-                  ? AppColors.primary
-                  : const Color(0xFF5F5F68),
+              size: 18,
+              color: selected ? AppColors.primary : const Color(0xFF5F5F68),
             ),
           ),
         ),

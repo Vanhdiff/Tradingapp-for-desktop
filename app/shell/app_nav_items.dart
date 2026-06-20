@@ -11,18 +11,6 @@ abstract class AppNavItems {
       icon: FluentIcons.view_dashboard,
     ),
     AppNavItem(
-      key: 'trading',
-      label: 'Trading',
-      route: RouteNames.trading,
-      icon: FluentIcons.switch_widget,
-    ),
-    AppNavItem(
-      key: 'guardrails',
-      label: 'Guardrails',
-      route: RouteNames.guardrails,
-      icon: FluentIcons.shield,
-    ),
-    AppNavItem(
       key: 'journal',
       label: 'Journal',
       route: RouteNames.journal,
@@ -45,12 +33,6 @@ abstract class AppNavItems {
       label: 'Notebook',
       route: RouteNames.notebook,
       icon: FluentIcons.memo,
-    ),
-    AppNavItem(
-      key: 'sanctuary',
-      label: 'Sanctuary',
-      route: RouteNames.sanctuary,
-      icon: FluentIcons.heart,
     ),
     AppNavItem(
       key: 'news',
