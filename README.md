@@ -18,11 +18,9 @@ REST API
 Database
 Screenshots
 
-Add screenshots here.
 
 Installation
 Clone Repository
-git clone https://github.com/your-username/tradingapp.git
 cd tradingapp
 Install Dependencies
 flutter pub get
