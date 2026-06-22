@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../widgets/dashboard_top_metrics.dart';
 import '../widgets/discipline_panel.dart';
 import '../widgets/equity_chart.dart';
@@ -10,63 +11,175 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const DashboardTopMetrics(),
-          const SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            height: 38,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFF2F5),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFF2E2E8)),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0x11000000),
-                  blurRadius: 18,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Row(
-              children: const [
-                Icon(FluentIcons.info, size: 12, color: Color(0xFFE38AAA)),
-                SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    'You are down 17% this month — review your journal, and rebuild from risk management basics.',
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      color: Color(0xFFA46A82),
-                      fontWeight: FontWeight.w600,
-                    ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const horizontalPadding = 22.0;
+        final contentWidth = constraints.maxWidth - horizontalPadding * 2;
+        final targetWidth = contentWidth * 0.9;
+        final pageWidth = targetWidth < 1120 ? 1120.0 : targetWidth;
+        final scrollWidth = pageWidth > contentWidth ? pageWidth : contentWidth;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(
+            horizontalPadding,
+            12,
+            horizontalPadding,
+            18,
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: scrollWidth,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: pageWidth,
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _DashboardHeader(),
+                      SizedBox(height: 14),
+                      DashboardTopMetrics(),
+                      SizedBox(height: 10),
+                      _RiskCoachBanner(),
+                      SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 8, child: EquityChart()),
+                          SizedBox(width: 14),
+                          Expanded(flex: 5, child: DisciplinePanel()),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 8, child: RecentTradesTable()),
+                          SizedBox(width: 14),
+                          Expanded(flex: 5, child: RuleBreakPanel()),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-          const SizedBox(height: 10),
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(flex: 8, child: EquityChart()),
-              SizedBox(width: 12),
-              Expanded(flex: 4, child: DisciplinePanel()),
-            ],
+        );
+      },
+    );
+  }
+}
+
+class _DashboardHeader extends StatelessWidget {
+  const _DashboardHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: const [
+        Text(
+          'Dashboard',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
           ),
-          const SizedBox(height: 10),
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(flex: 8, child: RecentTradesTable()),
-              SizedBox(width: 12),
-              Expanded(flex: 4, child: RuleBreakPanel()),
-            ],
+        ),
+        SizedBox(width: 14),
+        Expanded(
+          child: Text(
+            'Your trading performance at a glance — track your progress, discipline, and daily flow.',
+            style: TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        _TimeRangeFilter(),
+      ],
+    );
+  }
+}
+
+class _TimeRangeFilter extends StatelessWidget {
+  const _TimeRangeFilter();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        _RangeButton('Day'),
+        SizedBox(width: 6),
+        _RangeButton('Week'),
+        SizedBox(width: 6),
+        _RangeButton('14 D'),
+        SizedBox(width: 6),
+        _RangeButton('30 D', selected: true),
+      ],
+    );
+  }
+}
+
+class _RangeButton extends StatelessWidget {
+  final String label;
+  final bool selected;
+
+  const _RangeButton(this.label, {this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: selected ? AppColors.primary : Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: selected ? AppColors.primary : const Color(0xFFE8E3F3),
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          color: selected ? Colors.white : AppColors.textSecondary,
+        ),
+      ),
+    );
+  }
+}
+
+class _RiskCoachBanner extends StatelessWidget {
+  const _RiskCoachBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 38,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF2F5),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF2E2E8)),
+      ),
+      child: Row(
+        children: const [
+          Icon(FluentIcons.error_badge, size: 15, color: AppColors.danger),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'You are down 17% this month — review your journal, and rebuild from risk management basics.',
+              style: TextStyle(
+                fontSize: 11,
+                color: Color(0xFFA46A82),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
