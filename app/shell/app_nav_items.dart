@@ -17,18 +17,6 @@ abstract class AppNavItems {
       icon: FluentIcons.edit_note,
     ),
     AppNavItem(
-      key: 'analytics',
-      label: 'Analytics',
-      route: RouteNames.analytics,
-      icon: FluentIcons.chart,
-    ),
-    AppNavItem(
-      key: 'plan',
-      label: 'Plan',
-      route: RouteNames.plan,
-      icon: FluentIcons.task_manager,
-    ),
-    AppNavItem(
       key: 'notebook',
       label: 'Notebook',
       route: RouteNames.notebook,
@@ -39,12 +27,6 @@ abstract class AppNavItems {
       label: 'News',
       route: RouteNames.news,
       icon: FluentIcons.news,
-    ),
-    AppNavItem(
-      key: 'floai',
-      label: 'FloAI',
-      route: RouteNames.floai,
-      icon: FluentIcons.robot,
     ),
   ];
 
