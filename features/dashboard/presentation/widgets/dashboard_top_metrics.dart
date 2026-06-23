@@ -1,8 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../models/dashboard_mt5_snapshot.dart';
 
 class DashboardTopMetrics extends StatelessWidget {
-  const DashboardTopMetrics({super.key});
+  final DashboardMt5Snapshot snapshot;
+
+  const DashboardTopMetrics({super.key, required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -11,29 +14,37 @@ class DashboardTopMetrics extends StatelessWidget {
         Expanded(
           child: _SummaryMetricCard(
             title: 'ACCOUNT BALANCE',
-            value: '\$18,427.59',
+            value: dashboardMoney(snapshot.accountBalance),
           ),
         ),
         SizedBox(width: 12),
         Expanded(
           child: _SummaryMetricCard(
             title: 'TOTAL CLOSED PnL',
-            value: '-\$3,285.40',
-            valueColor: AppColors.danger,
+            value: dashboardMoney(snapshot.totalClosedPnl),
+            valueColor: snapshot.totalClosedPnl < 0
+                ? AppColors.danger
+                : AppColors.success,
           ),
         ),
         SizedBox(width: 12),
         Expanded(
           child: _SummaryMetricCard(
             title: 'WIN RATE',
-            value: '28.21%',
-            trailing: Icon(FluentIcons.down, size: 12, color: AppColors.danger),
+            value: '${snapshot.winRate.toStringAsFixed(2)}%',
+            trailing: Icon(
+              snapshot.winRate >= 50 ? FluentIcons.up : FluentIcons.down,
+              size: 12,
+              color: snapshot.winRate >= 50
+                  ? AppColors.success
+                  : AppColors.danger,
+            ),
           ),
         ),
         SizedBox(width: 12),
-        Expanded(child: _AvgRMetricCard()),
+        Expanded(child: _AvgRMetricCard(snapshot: snapshot)),
         SizedBox(width: 12),
-        Expanded(child: _ProfitFactorCard()),
+        Expanded(child: _ProfitFactorCard(snapshot: snapshot)),
       ],
     );
   }
@@ -101,7 +112,9 @@ class _SummaryMetricCard extends StatelessWidget {
 }
 
 class _AvgRMetricCard extends StatelessWidget {
-  const _AvgRMetricCard();
+  final DashboardMt5Snapshot snapshot;
+
+  const _AvgRMetricCard({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +148,7 @@ class _AvgRMetricCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                '+0.42R',
+                _r(snapshot.avgRPerTrade),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -144,7 +157,7 @@ class _AvgRMetricCard extends StatelessWidget {
               ),
               SizedBox(width: 12),
               Text(
-                '+2.33R',
+                _r(snapshot.bestR),
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -153,7 +166,7 @@ class _AvgRMetricCard extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Text(
-                '-1.00R',
+                _r(snapshot.worstR),
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -193,7 +206,9 @@ class _AvgRMetricCard extends StatelessWidget {
 }
 
 class _ProfitFactorCard extends StatelessWidget {
-  const _ProfitFactorCard();
+  final DashboardMt5Snapshot snapshot;
+
+  const _ProfitFactorCard({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +245,7 @@ class _ProfitFactorCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '1.15',
+                      snapshot.profitFactor.toStringAsFixed(2),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -250,6 +265,10 @@ class _ProfitFactorCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String _r(double value) {
+  return '${value > 0 ? '+' : ''}${value.toStringAsFixed(2)}R';
 }
 
 class _MiniGauge extends StatelessWidget {

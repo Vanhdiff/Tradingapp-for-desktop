@@ -4,6 +4,7 @@ import '../../../../app/theme/app_colors.dart';
 
 class CalendarDayData {
   final int day;
+  final String? dateKey;
   final int lowImpact;
   final int mediumImpact;
   final int highImpact;
@@ -13,6 +14,7 @@ class CalendarDayData {
 
   const CalendarDayData({
     required this.day,
+    this.dateKey,
     this.lowImpact = 0,
     this.mediumImpact = 0,
     this.highImpact = 0,
@@ -23,6 +25,7 @@ class CalendarDayData {
 }
 
 class NewsEventData {
+  final String id;
   final String time;
   final String currency;
   final Color impactColor;
@@ -32,6 +35,7 @@ class NewsEventData {
   final String previous;
 
   const NewsEventData({
+    this.id = '',
     required this.time,
     required this.currency,
     required this.impactColor,

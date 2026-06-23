@@ -5,8 +5,15 @@ import '../data/news_sample_data.dart';
 
 class NewsCalendarPanel extends StatelessWidget {
   final List<CalendarDayData> days;
+  final DateTime visibleMonth;
+  final ValueChanged<CalendarDayData>? onDaySelected;
 
-  const NewsCalendarPanel({super.key, required this.days});
+  const NewsCalendarPanel({
+    super.key,
+    required this.days,
+    required this.visibleMonth,
+    this.onDaySelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,7 @@ class NewsCalendarPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _CalendarHeader(),
+          _CalendarHeader(visibleMonth: visibleMonth),
           SizedBox(height: 14),
           _WeekdayHeader(),
           SizedBox(height: 8),
@@ -34,7 +41,12 @@ class NewsCalendarPanel extends StatelessWidget {
                   mainAxisSpacing: 8,
                   childAspectRatio: compact ? 0.98 : 1.28,
                 ),
-                itemBuilder: (context, index) => _CalendarDayTile(days[index]),
+                itemBuilder: (context, index) => _CalendarDayTile(
+                  days[index],
+                  onPressed: onDaySelected == null
+                      ? null
+                      : () => onDaySelected!(days[index]),
+                ),
               );
             },
           ),
@@ -45,7 +57,9 @@ class NewsCalendarPanel extends StatelessWidget {
 }
 
 class _CalendarHeader extends StatelessWidget {
-  const _CalendarHeader();
+  final DateTime visibleMonth;
+
+  const _CalendarHeader({required this.visibleMonth});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +70,7 @@ class _CalendarHeader extends StatelessWidget {
         _NavButton(FluentIcons.chevron_right),
         SizedBox(width: 12),
         Text(
-          'January 2026',
+          _monthTitle(visibleMonth),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
@@ -115,77 +129,83 @@ class _Weekday extends StatelessWidget {
 
 class _CalendarDayTile extends StatelessWidget {
   final CalendarDayData day;
+  final VoidCallback? onPressed;
 
-  const _CalendarDayTile(this.day);
+  const _CalendarDayTile(this.day, {this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        color: day.isMuted ? AppColors.surfaceAlt : AppColors.surface,
-        borderRadius: BorderRadius.circular(9),
-        border: Border.all(
-          color: day.isToday ? AppColors.primary : AppColors.border,
-          width: day.isToday ? 1.4 : 1,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Text(
-              '${day.day}',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: day.isMuted ? Color(0xFFB7B0C4) : AppColors.textPrimary,
-              ),
-            ),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.all(9),
+        decoration: BoxDecoration(
+          color: day.isMuted ? AppColors.surfaceAlt : AppColors.surface,
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(
+            color: day.isToday ? AppColors.primary : AppColors.border,
+            width: day.isToday ? 1.4 : 1,
           ),
-          if (day.isToday)
+        ),
+        child: Stack(
+          children: [
             Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  'Today',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 9,
-                    fontWeight: FontWeight.w800,
-                  ),
+              alignment: Alignment.topRight,
+              child: Text(
+                '${day.day}',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: day.isMuted
+                      ? Color(0xFFB7B0C4)
+                      : AppColors.textPrimary,
                 ),
               ),
             ),
-          if (day.isBlocked)
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primarySoft,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primary),
-                ),
-                child: Text(
-                  'Trading locked around\nhigh-impact news.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+            if (day.isToday)
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                  decoration: BoxDecoration(
                     color: AppColors.primary,
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    height: 1.25,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    'Today',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ),
-            )
-          else
-            Align(alignment: Alignment.bottomLeft, child: _ImpactCounts(day)),
-        ],
+            if (day.isBlocked)
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primarySoft,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.primary),
+                  ),
+                  child: Text(
+                    'Trading locked around\nhigh-impact news.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      height: 1.25,
+                    ),
+                  ),
+                ),
+              )
+            else
+              Align(alignment: Alignment.bottomLeft, child: _ImpactCounts(day)),
+          ],
+        ),
       ),
     );
   }
@@ -308,4 +328,22 @@ BoxDecoration _panelDecoration() {
       ),
     ],
   );
+}
+
+String _monthTitle(DateTime value) {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  return '${months[value.month - 1]} ${value.year}';
 }

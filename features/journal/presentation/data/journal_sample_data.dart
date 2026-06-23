@@ -99,6 +99,7 @@ abstract final class JournalSampleData {
 
 class JournalCalendarDay {
   final int day;
+  final String? dateKey;
   final double pnl;
   final int tradeCount;
   final bool isMuted;
@@ -106,6 +107,7 @@ class JournalCalendarDay {
 
   const JournalCalendarDay({
     required this.day,
+    this.dateKey,
     this.pnl = 0,
     this.tradeCount = 0,
     this.isMuted = false,
@@ -113,7 +115,101 @@ class JournalCalendarDay {
   });
 }
 
+class JournalMonthSummary {
+  final double expectancy;
+  final double winRate;
+  final double avgWin;
+  final double avgLoss;
+  final double netPnl;
+  final int mistakes;
+  final List<double> weeklyPnl;
+
+  const JournalMonthSummary({
+    required this.expectancy,
+    required this.winRate,
+    required this.avgWin,
+    required this.avgLoss,
+    required this.netPnl,
+    required this.mistakes,
+    required this.weeklyPnl,
+  });
+
+  factory JournalMonthSummary.sample() {
+    return const JournalMonthSummary(
+      expectancy: 0.38,
+      winRate: 61,
+      avgWin: 420,
+      avgLoss: -180,
+      netPnl: 1916,
+      mistakes: 4,
+      weeklyPnl: [640, 1120, -310, 466],
+    );
+  }
+}
+
+class JournalWeekSummary {
+  final int week;
+  final double pnl;
+  final int tradeCount;
+  final double winRate;
+
+  const JournalWeekSummary({
+    required this.week,
+    required this.pnl,
+    required this.tradeCount,
+    required this.winRate,
+  });
+
+  factory JournalWeekSummary.sample(int week, double pnl) {
+    return JournalWeekSummary(
+      week: week,
+      pnl: pnl,
+      tradeCount: 4,
+      winRate: pnl >= 0 ? 65 : 35,
+    );
+  }
+}
+
+class JournalDaySummary {
+  final String dateKey;
+  final double netPnl;
+  final double returnPercent;
+  final double expectancy;
+  final int tradeCount;
+  final int ruleBreakCount;
+  final double maxDailyLossUsed;
+  final double disciplineScore;
+  final List<JournalOverviewTrade> trades;
+
+  const JournalDaySummary({
+    required this.dateKey,
+    required this.netPnl,
+    required this.returnPercent,
+    required this.expectancy,
+    required this.tradeCount,
+    required this.ruleBreakCount,
+    required this.maxDailyLossUsed,
+    required this.disciplineScore,
+    required this.trades,
+  });
+
+  factory JournalDaySummary.sample() {
+    return JournalDaySummary(
+      dateKey: '2026-03-10',
+      netPnl: 332,
+      returnPercent: 0.9,
+      expectancy: 0.32,
+      tradeCount: 4,
+      ruleBreakCount: 1,
+      maxDailyLossUsed: 0.38,
+      disciplineScore: 0.72,
+      trades: JournalSampleData.overviewTrades,
+    );
+  }
+}
+
 class JournalOverviewTrade {
+  final int? id;
   final String symbol;
   final String direction;
   final double pnl;
@@ -124,6 +220,7 @@ class JournalOverviewTrade {
   final String status;
 
   const JournalOverviewTrade({
+    this.id,
     required this.symbol,
     required this.direction,
     required this.pnl,

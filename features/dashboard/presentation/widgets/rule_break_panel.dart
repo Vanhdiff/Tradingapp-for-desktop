@@ -1,9 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../models/dashboard_mt5_snapshot.dart';
 
 class RuleBreakPanel extends StatelessWidget {
-  const RuleBreakPanel({super.key});
+  final DashboardMt5Snapshot snapshot;
+
+  const RuleBreakPanel({super.key, required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +30,17 @@ class RuleBreakPanel extends StatelessWidget {
         children: [
           _PanelHeader(),
           SizedBox(height: 14),
-          _TradesProgress(),
+          _TradesProgress(snapshot: snapshot),
           SizedBox(height: 11),
           _TradingWindowRow(),
           SizedBox(height: 14),
-          _ClosedPnlSection(),
+          _ClosedPnlSection(snapshot: snapshot),
           SizedBox(height: 12),
-          _LossProgressBar(),
+          _LossProgressBar(snapshot: snapshot),
           SizedBox(height: 7),
-          _LimitLabels(),
+          _LimitLabels(snapshot: snapshot),
           SizedBox(height: 14),
-          _MaxLossAlert(),
+          _MaxLossAlert(snapshot: snapshot),
         ],
       ),
     );
@@ -110,7 +113,9 @@ class _PanelTitle extends StatelessWidget {
 }
 
 class _TradesProgress extends StatelessWidget {
-  const _TradesProgress();
+  final DashboardMt5Snapshot snapshot;
+
+  const _TradesProgress({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +133,7 @@ class _TradesProgress extends StatelessWidget {
           ),
         ),
         Text(
-          '5 / 5',
+          '${snapshot.todayTradeCount} / ${snapshot.maxTradesPerDay}',
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w800,
@@ -143,7 +148,9 @@ class _TradesProgress extends StatelessWidget {
             height: 8,
             margin: EdgeInsets.only(right: i == 4 ? 0 : 6),
             decoration: BoxDecoration(
-              color: AppColors.success,
+              color: i < snapshot.todayTradeCount
+                  ? AppColors.success
+                  : AppColors.border,
               borderRadius: BorderRadius.circular(999),
             ),
           ),
@@ -181,7 +188,9 @@ class _TradingWindowRow extends StatelessWidget {
 }
 
 class _ClosedPnlSection extends StatelessWidget {
-  const _ClosedPnlSection();
+  final DashboardMt5Snapshot snapshot;
+
+  const _ClosedPnlSection({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -204,11 +213,13 @@ class _ClosedPnlSection extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  r'-$3,285.40',
+                  dashboardMoney(snapshot.todayClosedPnl),
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.danger,
+                    color: snapshot.todayClosedPnl < 0
+                        ? AppColors.danger
+                        : AppColors.success,
                   ),
                 ),
               ),
@@ -223,10 +234,19 @@ class _ClosedPnlSection extends StatelessWidget {
 }
 
 class _LossProgressBar extends StatelessWidget {
-  const _LossProgressBar();
+  final DashboardMt5Snapshot snapshot;
+
+  const _LossProgressBar({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
+    final lossUsed = snapshot.todayClosedPnl < 0
+        ? (snapshot.todayClosedPnl.abs() / snapshot.maxDailyLoss).clamp(
+            0.0,
+            1.0,
+          )
+        : 0.0;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(999),
       child: Container(
@@ -235,8 +255,12 @@ class _LossProgressBar extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: FractionallySizedBox(
-            widthFactor: 0.70,
-            child: ColoredBox(color: Color(0xFFFF7B7F)),
+            widthFactor: lossUsed,
+            child: ColoredBox(
+              color: snapshot.maxLossReached
+                  ? Color(0xFFFF7B7F)
+                  : AppColors.warning,
+            ),
           ),
         ),
       ),
@@ -245,7 +269,9 @@ class _LossProgressBar extends StatelessWidget {
 }
 
 class _LimitLabels extends StatelessWidget {
-  const _LimitLabels();
+  final DashboardMt5Snapshot snapshot;
+
+  const _LimitLabels({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +281,7 @@ class _LimitLabels extends StatelessWidget {
       alignment: WrapAlignment.spaceBetween,
       children: [
         Text(
-          'Max loss  \$3,000',
+          'Max loss  ${dashboardMoney(snapshot.maxDailyLoss)}',
           style: TextStyle(
             fontSize: 10,
             color: AppColors.textSecondary,
@@ -263,7 +289,7 @@ class _LimitLabels extends StatelessWidget {
           ),
         ),
         Text(
-          'Daily Target  \$10,000',
+          'Daily Target  ${dashboardMoney(snapshot.dailyTarget)}',
           style: TextStyle(
             fontSize: 10,
             color: AppColors.textSecondary,
@@ -276,7 +302,9 @@ class _LimitLabels extends StatelessWidget {
 }
 
 class _MaxLossAlert extends StatelessWidget {
-  const _MaxLossAlert();
+  final DashboardMt5Snapshot snapshot;
+
+  const _MaxLossAlert({required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -284,20 +312,33 @@ class _MaxLossAlert extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.danger.withValues(alpha: 0.10),
+        color: (snapshot.maxLossReached ? AppColors.danger : AppColors.success)
+            .withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
-          Icon(FluentIcons.error_badge, size: 14, color: AppColors.danger),
+          Icon(
+            snapshot.maxLossReached
+                ? FluentIcons.error_badge
+                : FluentIcons.check_mark,
+            size: 14,
+            color: snapshot.maxLossReached
+                ? AppColors.danger
+                : AppColors.success,
+          ),
           SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Max Loss is reached!',
+              snapshot.maxLossReached
+                  ? 'Max Loss is reached!'
+                  : 'Risk guardrails are within limits.',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: AppColors.danger,
+                color: snapshot.maxLossReached
+                    ? AppColors.danger
+                    : AppColors.success,
               ),
             ),
           ),

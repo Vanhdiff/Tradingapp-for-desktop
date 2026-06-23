@@ -1,9 +1,12 @@
 import 'dart:math' as math;
 import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../models/dashboard_mt5_snapshot.dart';
 
 class DisciplinePanel extends StatelessWidget {
-  const DisciplinePanel({super.key});
+  final DashboardMt5Snapshot snapshot;
+
+  const DisciplinePanel({super.key, required this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -66,21 +69,21 @@ class DisciplinePanel extends StatelessWidget {
                     children: [
                       _MetricRow(
                         'Performance',
-                        '26/40',
-                        0.65,
+                        '${snapshot.performanceScore}/40',
+                        snapshot.performanceScore / 40,
                         AppColors.success,
                       ),
                       SizedBox(height: 16),
                       _MetricRow(
                         'Discipline',
-                        '32/40',
-                        0.78,
+                        '${(snapshot.disciplineScore * 0.4).round()}/40',
+                        snapshot.disciplineScore / 100,
                         AppColors.primary,
                       ),
                       SizedBox(height: 18),
                       _StatRow(
                         'Max Daily Loss Violations',
-                        '1 / 2',
+                        '${snapshot.maxLossViolations} / 2',
                         trailing: Icon(
                           FluentIcons.chevron_down_small,
                           size: 12,
@@ -90,7 +93,7 @@ class DisciplinePanel extends StatelessWidget {
                       SizedBox(height: 10),
                       _StatRow(
                         'Profit Target Violations',
-                        '1 / 2',
+                        '${snapshot.profitTargetViolations} / 2',
                         trailing: Icon(
                           FluentIcons.chevron_down_small,
                           size: 12,
@@ -100,7 +103,9 @@ class DisciplinePanel extends StatelessWidget {
                       SizedBox(height: 10),
                       _StatRow(
                         'Not exceeding max trades',
-                        '✓',
+                        snapshot.todayTradeCount <= snapshot.maxTradesPerDay
+                            ? '✓'
+                            : '!',
                         trailing: Icon(
                           FluentIcons.check_mark,
                           size: 12,
@@ -110,15 +115,15 @@ class DisciplinePanel extends StatelessWidget {
                       SizedBox(height: 18),
                       _MetricRow(
                         'Consistency',
-                        '6/20',
-                        0.30,
+                        '${snapshot.consistencyScore}/20',
+                        snapshot.consistencyScore / 20,
                         Color(0xFFE96AA9),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(width: 16),
-                _ScoreColumn(),
+                _ScoreColumn(score: snapshot.disciplineScore),
               ],
             ),
           ),
@@ -226,7 +231,9 @@ class _StatRow extends StatelessWidget {
 }
 
 class _ScoreColumn extends StatelessWidget {
-  const _ScoreColumn();
+  final int score;
+
+  const _ScoreColumn({required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -234,12 +241,14 @@ class _ScoreColumn extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _ScoreRing(score: 64),
+        _ScoreRing(score: score),
         SizedBox(height: 12),
         SizedBox(
           width: 90,
           child: Text(
-            "6 more points to get 'Consistent Trader'",
+            score >= 70
+                ? "Consistent Trader status active"
+                : "${70 - score} more points to get 'Consistent Trader'",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 10,

@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../shared/widgets/app_panel.dart';
+import '../../data/datasources/journal_remote_datasource.dart';
 import '../data/journal_sample_data.dart';
 import '../widgets/journal_charts_panel.dart';
 import '../widgets/journal_header.dart';
@@ -28,6 +29,30 @@ class _JournalPageState extends State<JournalPage> {
   bool _showTradeDetail = false;
   int? _selectedCalendarDayIndex;
   int? _selectedTradeIndex;
+  late DateTime _visibleMonth;
+  List<JournalCalendarDay> _calendarDays = JournalSampleData.calendarDays;
+  List<JournalOverviewTrade> _overviewTrades = JournalSampleData.overviewTrades;
+  JournalMonthSummary _monthSummary = JournalMonthSummary.sample();
+  List<JournalWeekSummary> _weekSummary = [
+    JournalWeekSummary.sample(1, 640),
+    JournalWeekSummary.sample(2, 1120),
+    JournalWeekSummary.sample(3, -310),
+    JournalWeekSummary.sample(4, 466),
+  ];
+  JournalDaySummary _daySummary = JournalDaySummary.sample();
+  bool _isLoadingOverview = true;
+  String? _overviewError;
+
+  final JournalRemoteDataSource _journalRemoteDataSource =
+      JournalRemoteDataSource();
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _visibleMonth = DateTime(now.year, now.month);
+    _loadJournalOverview();
+  }
 
   @override
   void dispose() {
@@ -64,15 +89,26 @@ class _JournalPageState extends State<JournalPage> {
                       ? _buildTradeDetail()
                       : _JournalOverview(
                           selectedCalendarDayIndex: _selectedCalendarDayIndex,
+                          visibleMonth: _visibleMonth,
+                          calendarDays: _calendarDays,
+                          monthSummary: _monthSummary,
+                          weekSummary: _weekSummary,
+                          daySummary: _daySummary,
+                          trades: _overviewTrades,
+                          isLoading: _isLoadingOverview,
+                          errorMessage: _overviewError,
                           onCalendarDaySelected: (index) {
-                            setState(() => _selectedCalendarDayIndex = index);
+                            _selectCalendarDay(index);
                           },
                           selectedTradeIndex: _selectedTradeIndex,
                           onTradeClicked: (index) {
                             setState(() => _selectedTradeIndex = index);
                           },
-                          onTradeSelected: () {
-                            setState(() => _showTradeDetail = true);
+                          onTradeSelected: (index) {
+                            setState(() {
+                              _selectedTradeIndex = index;
+                              _showTradeDetail = true;
+                            });
                           },
                         ),
                 ),
@@ -85,11 +121,13 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Widget _buildTradeDetail() {
+    final trade = _selectedTrade;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         JournalHeader(
-          title: JournalSampleData.title,
+          title: _detailTitle(trade),
           onBack: () => setState(() => _showTradeDetail = false),
         ),
         const SizedBox(height: 18),
@@ -99,10 +137,18 @@ class _JournalPageState extends State<JournalPage> {
             SizedBox(
               width: 360,
               child: JournalTradeDetailsPanel(
-                netPnl: JournalSampleData.netPnl,
-                instrument: JournalSampleData.instrument,
-                direction: JournalSampleData.direction,
-                lotSize: JournalSampleData.lotSize,
+                netPnl: trade == null
+                    ? JournalSampleData.netPnl
+                    : _money(trade.pnl),
+                instrument: trade == null
+                    ? JournalSampleData.instrument
+                    : trade.symbol,
+                direction: trade == null
+                    ? JournalSampleData.direction
+                    : _directionLabel(trade.direction),
+                lotSize: trade == null
+                    ? JournalSampleData.lotSize
+                    : trade.lots.toStringAsFixed(2),
               ),
             ),
             const SizedBox(width: 18),
@@ -148,17 +194,146 @@ class _JournalPageState extends State<JournalPage> {
   void _setFollowedPlan(bool value) {
     setState(() => _followedPlan = value);
   }
+
+  JournalOverviewTrade? get _selectedTrade {
+    final index = _selectedTradeIndex;
+    if (index == null || index < 0 || index >= _overviewTrades.length) {
+      return null;
+    }
+    return _overviewTrades[index];
+  }
+
+  String _detailTitle(JournalOverviewTrade? trade) {
+    if (trade == null) return JournalSampleData.title;
+    return '${trade.symbol} · ${_directionLabel(trade.direction)} · ${trade.setup}';
+  }
+
+  String _directionLabel(String direction) {
+    final isBuy = direction.toLowerCase() == 'buy';
+    return '${isBuy ? '↑' : '↓'} ${isBuy ? 'Buy' : 'Sell'}';
+  }
+
+  Future<void> _loadJournalOverview() async {
+    setState(() {
+      _isLoadingOverview = true;
+      _overviewError = null;
+    });
+
+    try {
+      final results = await Future.wait([
+        _journalRemoteDataSource.fetchCalendar(
+          year: _visibleMonth.year,
+          month: _visibleMonth.month,
+        ),
+        _journalRemoteDataSource.fetchMonthSummary(
+          year: _visibleMonth.year,
+          month: _visibleMonth.month,
+        ),
+        _journalRemoteDataSource.fetchWeekSummary(
+          year: _visibleMonth.year,
+          month: _visibleMonth.month,
+        ),
+      ]);
+
+      if (!mounted) return;
+      final days = results[0] as List<JournalCalendarDay>;
+      final selectedIndex = _defaultSelectedDayIndex(days);
+      final selectedDateKey = selectedIndex == null
+          ? _dateKey(DateTime(_visibleMonth.year, _visibleMonth.month))
+          : days[selectedIndex].dateKey!;
+      final daySummary = await _journalRemoteDataSource.fetchDaySummary(
+        dateKey: selectedDateKey,
+      );
+
+      if (!mounted) return;
+      setState(() {
+        _calendarDays = days;
+        _monthSummary = results[1] as JournalMonthSummary;
+        _weekSummary = results[2] as List<JournalWeekSummary>;
+        _daySummary = daySummary;
+        _overviewTrades = daySummary.trades;
+        _selectedCalendarDayIndex = selectedIndex;
+        _selectedTradeIndex = null;
+        _isLoadingOverview = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _isLoadingOverview = false;
+        _overviewError = 'Backend offline - showing sample journal data';
+      });
+    }
+  }
+
+  Future<void> _selectCalendarDay(int index) async {
+    setState(() {
+      _selectedCalendarDayIndex = index;
+      _selectedTradeIndex = null;
+    });
+
+    final dateKey = _calendarDays[index].dateKey;
+    if (dateKey == null) return;
+
+    try {
+      final daySummary = await _journalRemoteDataSource.fetchDaySummary(
+        dateKey: dateKey,
+      );
+      if (!mounted) return;
+      setState(() {
+        _daySummary = daySummary;
+        _overviewTrades = daySummary.trades;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _daySummary = JournalDaySummary.sample();
+        _overviewTrades = JournalSampleData.overviewTrades;
+      });
+    }
+  }
+
+  int? _defaultSelectedDayIndex(List<JournalCalendarDay> days) {
+    final todayKey = _dateKey(DateTime.now());
+    final todayIndex = days.indexWhere((day) => day.dateKey == todayKey);
+    if (todayIndex != -1) return todayIndex;
+    final tradeIndex = days.indexWhere(
+      (day) => !day.isMuted && day.tradeCount > 0,
+    );
+    return tradeIndex == -1 ? null : tradeIndex;
+  }
+
+  String _dateKey(DateTime value) {
+    final month = value.month.toString().padLeft(2, '0');
+    final day = value.day.toString().padLeft(2, '0');
+    return '${value.year}-$month-$day';
+  }
 }
 
 class _JournalOverview extends StatelessWidget {
   final int? selectedCalendarDayIndex;
+  final DateTime visibleMonth;
+  final List<JournalCalendarDay> calendarDays;
+  final JournalMonthSummary monthSummary;
+  final List<JournalWeekSummary> weekSummary;
+  final JournalDaySummary daySummary;
+  final List<JournalOverviewTrade> trades;
+  final bool isLoading;
+  final String? errorMessage;
   final ValueChanged<int> onCalendarDaySelected;
   final int? selectedTradeIndex;
   final ValueChanged<int> onTradeClicked;
-  final VoidCallback onTradeSelected;
+  final ValueChanged<int> onTradeSelected;
 
   const _JournalOverview({
     required this.selectedCalendarDayIndex,
+    required this.visibleMonth,
+    required this.calendarDays,
+    required this.monthSummary,
+    required this.weekSummary,
+    required this.daySummary,
+    required this.trades,
+    required this.isLoading,
+    required this.errorMessage,
     required this.onCalendarDaySelected,
     required this.selectedTradeIndex,
     required this.onTradeClicked,
@@ -174,9 +349,11 @@ class _JournalOverview extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _OverviewHeader(),
+              _OverviewHeader(isLoading: isLoading, errorMessage: errorMessage),
               SizedBox(height: 16),
               _JournalCalendarPanel(
+                visibleMonth: visibleMonth,
+                days: calendarDays,
                 selectedDayIndex: selectedCalendarDayIndex,
                 onDaySelected: onCalendarDaySelected,
               ),
@@ -184,9 +361,9 @@ class _JournalOverview extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: _MonthlySummaryPanel()),
+                  Expanded(child: _MonthlySummaryPanel(summary: monthSummary)),
                   SizedBox(width: 16),
-                  Expanded(child: _WeeklyBreakdownPanel()),
+                  Expanded(child: _WeeklyBreakdownPanel(weeks: weekSummary)),
                 ],
               ),
             ],
@@ -196,7 +373,9 @@ class _JournalOverview extends StatelessWidget {
         SizedBox(
           width: 340,
           child: _DayTradePanel(
+            trades: trades,
             selectedTradeIndex: selectedTradeIndex,
+            summary: daySummary,
             onTradeClicked: onTradeClicked,
             onTradeSelected: onTradeSelected,
           ),
@@ -207,7 +386,10 @@ class _JournalOverview extends StatelessWidget {
 }
 
 class _OverviewHeader extends StatelessWidget {
-  const _OverviewHeader();
+  final bool isLoading;
+  final String? errorMessage;
+
+  const _OverviewHeader({required this.isLoading, required this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +403,25 @@ class _OverviewHeader extends StatelessWidget {
             color: AppColors.textPrimary,
           ),
         ),
+        SizedBox(width: 12),
+        if (isLoading)
+          _StatusPill(
+            icon: FluentIcons.sync,
+            label: 'Loading backend',
+            color: AppColors.primary,
+          )
+        else if (errorMessage != null)
+          _StatusPill(
+            icon: FluentIcons.warning,
+            label: errorMessage!,
+            color: AppColors.warning,
+          )
+        else
+          _StatusPill(
+            icon: FluentIcons.check_mark,
+            label: 'Connected to backend',
+            color: AppColors.success,
+          ),
         Spacer(),
         _ToolbarButton(icon: FluentIcons.list, label: 'List'),
         SizedBox(width: 8),
@@ -238,11 +439,59 @@ class _OverviewHeader extends StatelessWidget {
   }
 }
 
+class _StatusPill extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _StatusPill({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: 260),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: color.withValues(alpha: 0.28)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: color),
+          SizedBox(width: 7),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _JournalCalendarPanel extends StatelessWidget {
+  final DateTime visibleMonth;
+  final List<JournalCalendarDay> days;
   final int? selectedDayIndex;
   final ValueChanged<int> onDaySelected;
 
   const _JournalCalendarPanel({
+    required this.visibleMonth,
+    required this.days,
     required this.selectedDayIndex,
     required this.onDaySelected,
   });
@@ -260,7 +509,7 @@ class _JournalCalendarPanel extends StatelessWidget {
               _NavButton(FluentIcons.chevron_right),
               SizedBox(width: 12),
               Text(
-                'March 2026',
+                _monthTitle(visibleMonth),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               SizedBox(width: 10),
@@ -286,7 +535,7 @@ class _JournalCalendarPanel extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: JournalSampleData.calendarDays.length,
+            itemCount: days.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               crossAxisSpacing: 8,
@@ -295,7 +544,7 @@ class _JournalCalendarPanel extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return _CalendarTradeDay(
-                day: JournalSampleData.calendarDays[index],
+                day: days[index],
                 selected: selectedDayIndex == index,
                 onPressed: () => onDaySelected(index),
               );
@@ -407,11 +656,15 @@ class _CalendarTradeDay extends StatelessWidget {
 }
 
 class _DayTradePanel extends StatelessWidget {
+  final List<JournalOverviewTrade> trades;
+  final JournalDaySummary summary;
   final int? selectedTradeIndex;
   final ValueChanged<int> onTradeClicked;
-  final VoidCallback onTradeSelected;
+  final ValueChanged<int> onTradeSelected;
 
   const _DayTradePanel({
+    required this.trades,
+    required this.summary,
     required this.selectedTradeIndex,
     required this.onTradeClicked,
     required this.onTradeSelected,
@@ -425,19 +678,19 @@ class _DayTradePanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Tue, March 10',
+            _dayTitle(summary.dateKey),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           SizedBox(height: 4),
           Text(
-            '3 trades imported from MT5',
+            '${summary.tradeCount} trades imported from MT5',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
           ),
           SizedBox(height: 18),
           Text(
-            '+\$332',
+            _money(summary.netPnl),
             style: TextStyle(
-              color: AppColors.success,
+              color: summary.netPnl >= 0 ? AppColors.success : AppColors.danger,
               fontSize: 34,
               fontWeight: FontWeight.w800,
             ),
@@ -454,40 +707,77 @@ class _DayTradePanel extends StatelessWidget {
           SizedBox(height: 18),
           Row(
             children: [
-              Expanded(child: _DayMetric('0.9%', 'Return')),
-              Expanded(child: _DayMetric('+0.32R', 'Expectancy')),
+              Expanded(
+                child: _DayMetric(
+                  '${summary.returnPercent.toStringAsFixed(2)}%',
+                  'Return',
+                ),
+              ),
+              Expanded(child: _DayMetric(_r(summary.expectancy), 'Expectancy')),
             ],
           ),
           SizedBox(height: 16),
           Row(
             children: [
-              Expanded(child: _DayMetric('4', 'Trades')),
-              Expanded(child: _DayMetric('1', 'Rule break')),
+              Expanded(child: _DayMetric('${summary.tradeCount}', 'Trades')),
+              Expanded(
+                child: _DayMetric('${summary.ruleBreakCount}', 'Rule break'),
+              ),
             ],
           ),
           SizedBox(height: 20),
-          _RiskLine(label: 'Max daily loss', value: 0.38),
+          _RiskLine(label: 'Max daily loss', value: summary.maxDailyLossUsed),
           SizedBox(height: 10),
-          _RiskLine(label: 'Discipline score', value: 0.72),
+          _RiskLine(label: 'Discipline score', value: summary.disciplineScore),
           SizedBox(height: 18),
           _TradeTabs(),
           SizedBox(height: 12),
-          ...JournalSampleData.overviewTrades.asMap().entries.map((entry) {
-            return _TradeListItem(
-              trade: entry.value,
-              selected: selectedTradeIndex == entry.key,
-              onPressed: () => onTradeClicked(entry.key),
-              onDoublePressed: onTradeSelected,
-            );
-          }),
+          if (trades.isEmpty)
+            _EmptyTradesNotice()
+          else
+            ...trades.asMap().entries.map((entry) {
+              return _TradeListItem(
+                trade: entry.value,
+                selected: selectedTradeIndex == entry.key,
+                onPressed: () => onTradeClicked(entry.key),
+                onDoublePressed: () => onTradeSelected(entry.key),
+              );
+            }),
         ],
       ),
     );
   }
 }
 
+class _EmptyTradesNotice extends StatelessWidget {
+  const _EmptyTradesNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceAlt,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Text(
+        'No trades synced for this day.',
+        style: TextStyle(
+          color: AppColors.textSecondary,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
 class _MonthlySummaryPanel extends StatelessWidget {
-  const _MonthlySummaryPanel();
+  final JournalMonthSummary summary;
+
+  const _MonthlySummaryPanel({required this.summary});
 
   @override
   Widget build(BuildContext context) {
@@ -509,15 +799,7 @@ class _MonthlySummaryPanel extends StatelessWidget {
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      _Bar(height: 84, label: 'W1', color: AppColors.success),
-                      SizedBox(width: 10),
-                      _Bar(height: 144, label: 'W2', color: AppColors.primary),
-                      SizedBox(width: 10),
-                      _Bar(height: 54, label: 'W3', color: AppColors.danger),
-                      SizedBox(width: 10),
-                      _Bar(height: 110, label: 'W4', color: AppColors.success),
-                    ],
+                    children: _bars(summary.weeklyPnl),
                   ),
                 ),
               ],
@@ -528,12 +810,15 @@ class _MonthlySummaryPanel extends StatelessWidget {
             width: 138,
             child: Column(
               children: [
-                _SummaryRow('Expectancy', '+0.38R'),
-                _SummaryRow('Win rate', '61%'),
-                _SummaryRow('Avg win', '\$420'),
-                _SummaryRow('Avg loss', '-\$180'),
-                _SummaryRow('Net PnL', '+\$1,916'),
-                _SummaryRow('Mistakes', '4'),
+                _SummaryRow('Expectancy', _r(summary.expectancy)),
+                _SummaryRow(
+                  'Win rate',
+                  '${summary.winRate.toStringAsFixed(0)}%',
+                ),
+                _SummaryRow('Avg win', _money(summary.avgWin)),
+                _SummaryRow('Avg loss', _money(summary.avgLoss)),
+                _SummaryRow('Net PnL', _money(summary.netPnl)),
+                _SummaryRow('Mistakes', '${summary.mistakes}'),
               ],
             ),
           ),
@@ -541,10 +826,35 @@ class _MonthlySummaryPanel extends StatelessWidget {
       ),
     );
   }
+
+  List<Widget> _bars(List<double> pnl) {
+    final values = List<double>.from(pnl);
+    while (values.length < 4) {
+      values.add(0);
+    }
+    final maxAbs = values
+        .map((value) => value.abs())
+        .fold<double>(1, (max, value) => value > max ? value : max);
+
+    return [
+      for (var index = 0; index < 4; index++) ...[
+        _Bar(
+          height: 44 + (values[index].abs() / maxAbs) * 100,
+          label: 'W${index + 1}',
+          color: values[index] >= 0
+              ? (index == 1 ? AppColors.primary : AppColors.success)
+              : AppColors.danger,
+        ),
+        if (index != 3) SizedBox(width: 10),
+      ],
+    ];
+  }
 }
 
 class _WeeklyBreakdownPanel extends StatelessWidget {
-  const _WeeklyBreakdownPanel();
+  final List<JournalWeekSummary> weeks;
+
+  const _WeeklyBreakdownPanel({required this.weeks});
 
   @override
   Widget build(BuildContext context) {
@@ -561,10 +871,14 @@ class _WeeklyBreakdownPanel extends StatelessWidget {
           SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _WeekColumn('Week 1', 0.62, '+\$640')),
-              Expanded(child: _WeekColumn('Week 2', 0.86, '+\$1,120')),
-              Expanded(child: _WeekColumn('Week 3', 0.34, '-\$310')),
-              Expanded(child: _WeekColumn('Week 4', 0.58, '+\$466')),
+              for (final week in weeks.take(4))
+                Expanded(
+                  child: _WeekColumn(
+                    'Week ${week.week}',
+                    (week.pnl.abs() / _maxWeekPnl).clamp(0.08, 1.0),
+                    _money(week.pnl),
+                  ),
+                ),
             ],
           ),
           Spacer(),
@@ -594,6 +908,13 @@ class _WeeklyBreakdownPanel extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  double get _maxWeekPnl {
+    if (weeks.isEmpty) return 1;
+    return weeks
+        .map((week) => week.pnl.abs())
+        .fold<double>(1, (max, value) => value > max ? value : max);
   }
 }
 
@@ -1142,4 +1463,46 @@ String _money(double value) {
       ? '-'
       : '';
   return '$sign\$${value.abs().toStringAsFixed(0)}';
+}
+
+String _r(double value) {
+  return '${value > 0 ? '+' : ''}${value.toStringAsFixed(2)}R';
+}
+
+String _monthTitle(DateTime value) {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  return '${months[value.month - 1]} ${value.year}';
+}
+
+String _dayTitle(String dateKey) {
+  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  final date = DateTime.parse(dateKey);
+  return '${weekdays[date.weekday - 1]}, ${months[date.month - 1]} ${date.day}';
 }

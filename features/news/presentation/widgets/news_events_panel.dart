@@ -5,8 +5,13 @@ import '../data/news_sample_data.dart';
 
 class NewsEventsPanel extends StatelessWidget {
   final List<NewsEventData> events;
+  final String title;
 
-  const NewsEventsPanel({super.key, required this.events});
+  const NewsEventsPanel({
+    super.key,
+    required this.events,
+    this.title = 'Today',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,7 @@ class NewsEventsPanel extends StatelessWidget {
               _NavButton(FluentIcons.chevron_right),
               SizedBox(width: 12),
               Text(
-                'Wed, Jan 8 · Today',
+                title,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
