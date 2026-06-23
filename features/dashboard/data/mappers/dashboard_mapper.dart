@@ -32,9 +32,6 @@ class DashboardQueryMapper {
   }
 
   static Map<String, dynamic> toQueryParams(DashboardQuery query) {
-    return {
-      'range': rangeToApi(query.range),
-      'mode': modeToApi(query.mode),
-    };
+    return {'range': rangeToApi(query.range), 'mode': modeToApi(query.mode)};
   }
 }

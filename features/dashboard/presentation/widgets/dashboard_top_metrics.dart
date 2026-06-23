@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class DashboardTopMetrics extends StatelessWidget {
-  DashboardTopMetrics({super.key});
+  const DashboardTopMetrics({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _SummaryMetricCard extends StatelessWidget {
   final Color? valueColor;
   final Widget? trailing;
 
-  _SummaryMetricCard({
+  const _SummaryMetricCard({
     required this.title,
     required this.value,
     this.valueColor,
@@ -58,9 +58,9 @@ class _SummaryMetricCard extends StatelessWidget {
       height: 78,
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x11000000),
@@ -101,7 +101,7 @@ class _SummaryMetricCard extends StatelessWidget {
 }
 
 class _AvgRMetricCard extends StatelessWidget {
-  _AvgRMetricCard();
+  const _AvgRMetricCard();
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +109,9 @@ class _AvgRMetricCard extends StatelessWidget {
       height: 78,
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x11000000),
@@ -193,7 +193,7 @@ class _AvgRMetricCard extends StatelessWidget {
 }
 
 class _ProfitFactorCard extends StatelessWidget {
-  _ProfitFactorCard();
+  const _ProfitFactorCard();
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +201,9 @@ class _ProfitFactorCard extends StatelessWidget {
       height: 78,
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x11000000),
@@ -253,7 +253,7 @@ class _ProfitFactorCard extends StatelessWidget {
 }
 
 class _MiniGauge extends StatelessWidget {
-  _MiniGauge();
+  const _MiniGauge();
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +268,12 @@ class _MiniGauge extends StatelessWidget {
 class _MiniGaugePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    stroke = 4.0;
+    final stroke = 4.0;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - stroke) / 2;
 
     final basePaint = Paint()
-      ..color = Color(0xFFF2EEF8)
+      ..color = AppColors.border
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke;
 

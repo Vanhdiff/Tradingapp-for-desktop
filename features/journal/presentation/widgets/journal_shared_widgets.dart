@@ -5,7 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 class JournalSectionLabel extends StatelessWidget {
   final String text;
 
-  JournalSectionLabel(this.text, {super.key});
+  const JournalSectionLabel(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class JournalComboField extends StatelessWidget {
   final List<String> items;
   final ValueChanged<String> onChanged;
 
-  JournalComboField({
+  const JournalComboField({
     super.key,
     required this.label,
     required this.value,
@@ -61,7 +61,7 @@ class JournalFieldShell extends StatelessWidget {
   final String label;
   final Widget child;
 
-  JournalFieldShell({
+  const JournalFieldShell({
     super.key,
     required this.label,
     required this.child,
@@ -80,7 +80,7 @@ class JournalMiniTag extends StatelessWidget {
   final String label;
   final bool removable;
 
-  JournalMiniTag(this.label, {super.key, this.removable = false});
+  const JournalMiniTag(this.label, {super.key, this.removable = false});
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +100,7 @@ class JournalMiniTag extends StatelessWidget {
           ),
           if (removable) ...[
             SizedBox(width: 6),
-            Icon(
-              FluentIcons.cancel,
-              size: 10,
-              color: AppColors.textSecondary,
-            ),
+            Icon(FluentIcons.cancel, size: 10, color: AppColors.textSecondary),
           ],
         ],
       ),
@@ -117,7 +113,7 @@ class JournalOutlineAction extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
 
-  JournalOutlineAction({
+  const JournalOutlineAction({
     super.key,
     required this.icon,
     required this.label,
@@ -138,10 +134,7 @@ class JournalOutlineAction extends StatelessWidget {
         children: [
           Icon(icon, size: 12, color: AppColors.primary),
           SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(color: AppColors.primary, fontSize: 12),
-          ),
+          Text(label, style: TextStyle(color: AppColors.primary, fontSize: 12)),
         ],
       ),
     );
@@ -151,7 +144,7 @@ class JournalOutlineAction extends StatelessWidget {
 class JournalPill extends StatelessWidget {
   final Widget child;
 
-  JournalPill({super.key, required this.child});
+  const JournalPill({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

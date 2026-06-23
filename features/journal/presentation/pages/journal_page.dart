@@ -53,12 +53,12 @@ class _JournalPageState extends State<JournalPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const JournalHeader(title: JournalSampleData.title),
+                      JournalHeader(title: JournalSampleData.title),
                       const SizedBox(height: 18),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             width: 360,
                             child: JournalTradeDetailsPanel(
                               netPnl: JournalSampleData.netPnl,
@@ -72,7 +72,7 @@ class _JournalPageState extends State<JournalPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                const JournalChartsPanel(),
+                                JournalChartsPanel(),
                                 const SizedBox(height: 18),
                                 JournalReviewPanel(
                                   reflectionController: _reflectionController,

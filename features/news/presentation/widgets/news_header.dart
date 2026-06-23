@@ -6,7 +6,7 @@ class NewsHeader extends StatelessWidget {
   final NewsViewMode selectedMode;
   final ValueChanged<NewsViewMode> onModeChanged;
 
-  NewsHeader({
+  const NewsHeader({
     super.key,
     required this.selectedMode,
     required this.onModeChanged,
@@ -30,7 +30,7 @@ class _HeaderActions extends StatelessWidget {
   final NewsViewMode selectedMode;
   final ValueChanged<NewsViewMode> onModeChanged;
 
-  _HeaderActions({
+  const _HeaderActions({
     required this.selectedMode,
     required this.onModeChanged,
   });
@@ -53,10 +53,7 @@ class _HeaderActions extends StatelessWidget {
           onTap: () => onModeChanged(NewsViewMode.calendar),
         ),
         SizedBox(width: 8),
-        _ModeButton(
-          icon: FluentIcons.lock,
-          label: 'Block Trading Settings',
-        ),
+        _ModeButton(icon: FluentIcons.lock, label: 'Block Trading Settings'),
         SizedBox(width: 8),
         _IconButton(FluentIcons.refresh),
       ],
@@ -70,7 +67,7 @@ class _ModeButton extends StatelessWidget {
   final bool selected;
   final VoidCallback? onTap;
 
-  _ModeButton({
+  const _ModeButton({
     required this.icon,
     required this.label,
     this.selected = false,
@@ -85,10 +82,10 @@ class _ModeButton extends StatelessWidget {
         height: 34,
         padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.white,
+          color: selected ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.circular(7),
           border: Border.all(
-            color: selected ? AppColors.primary : Color(0xFFE8E3F3),
+            color: selected ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Row(
@@ -117,7 +114,7 @@ class _ModeButton extends StatelessWidget {
 class _IconButton extends StatelessWidget {
   final IconData icon;
 
-  _IconButton(this.icon);
+  const _IconButton(this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +123,9 @@ class _IconButton extends StatelessWidget {
       height: 34,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: Color(0xFFE8E3F3)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Icon(icon, size: 15, color: AppColors.textSecondary),
     );

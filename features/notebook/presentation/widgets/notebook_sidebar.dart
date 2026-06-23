@@ -8,7 +8,7 @@ class NotebookSidebar extends StatefulWidget {
   final List<NotebookNote> recentNotes;
   final List<NotebookFolder> folders;
 
-  NotebookSidebar({
+  const NotebookSidebar({
     super.key,
     required this.pinnedNotes,
     required this.recentNotes,
@@ -32,7 +32,7 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
       constraints: BoxConstraints(minHeight: 820),
       padding: EdgeInsets.fromLTRB(18, 18, 18, 20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
+        color: AppColors.surface.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.border),
         boxShadow: [
@@ -96,7 +96,7 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
 }
 
 class _SearchBox extends StatelessWidget {
-  _SearchBox();
+  const _SearchBox();
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class _SectionHeader extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  _SectionHeader(
+  const _SectionHeader(
     this.title, {
     this.count,
     required this.expanded,
@@ -176,7 +176,7 @@ class _SectionHeader extends StatelessWidget {
             count == null ? title : '$title  $count',
             style: TextStyle(
               fontSize: 11,
-              color: Color(0xFF6E6779),
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -198,7 +198,7 @@ class _NoteTile extends StatelessWidget {
   final NotebookNote note;
   final bool compact;
 
-  _NoteTile(this.note, {this.compact = false});
+  const _NoteTile(this.note, {this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +259,7 @@ class _NoteTile extends StatelessWidget {
 class _FolderTile extends StatelessWidget {
   final NotebookFolder folder;
 
-  _FolderTile(this.folder);
+  const _FolderTile(this.folder);
 
   @override
   Widget build(BuildContext context) {

@@ -43,12 +43,12 @@ class _NotebookPageState extends State<NotebookPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const NotebookHeader(),
+                      NotebookHeader(),
                       const SizedBox(height: 20),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const NotebookSidebar(
+                          NotebookSidebar(
                             pinnedNotes: NotebookSampleData.pinnedNotes,
                             recentNotes: NotebookSampleData.recentNotes,
                             folders: NotebookSampleData.folders,

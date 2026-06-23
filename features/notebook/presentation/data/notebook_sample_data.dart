@@ -32,17 +32,17 @@ class NotebookTemplate {
   final Color accent;
   final IconData icon;
 
-  const NotebookTemplate({
+  NotebookTemplate({
     required this.title,
     required this.category,
     required this.count,
-    this.accent = AppColors.primary,
+    Color? accent,
     this.icon = FluentIcons.edit_note,
-  });
+  }) : accent = accent ?? AppColors.primary;
 }
 
 abstract final class NotebookSampleData {
-  static const pinnedNotes = [
+  static List<NotebookNote> get pinnedNotes => [
     NotebookNote(
       title: '2026 goals',
       preview: '200 A+ trades; max daily loss 2R; weekly review.',
@@ -52,7 +52,7 @@ abstract final class NotebookSampleData {
     ),
   ];
 
-  static const recentNotes = [
+  static List<NotebookNote> get recentNotes => [
     NotebookNote(
       title: 'Process',
       preview: 'New rule: write thesis pre-open, no intra-session edits.',
@@ -81,7 +81,7 @@ abstract final class NotebookSampleData {
     NotebookFolder(title: 'Drafts', count: 2),
   ];
 
-  static const templates = [
+  static List<NotebookTemplate> get templates => [
     NotebookTemplate(
       title: 'Pre-Market Thesis',
       category: 'My Templates',

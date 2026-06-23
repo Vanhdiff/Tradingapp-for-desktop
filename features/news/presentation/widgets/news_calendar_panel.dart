@@ -6,7 +6,7 @@ import '../data/news_sample_data.dart';
 class NewsCalendarPanel extends StatelessWidget {
   final List<CalendarDayData> days;
 
-  NewsCalendarPanel({super.key, required this.days});
+  const NewsCalendarPanel({super.key, required this.days});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class NewsCalendarPanel extends StatelessWidget {
 }
 
 class _CalendarHeader extends StatelessWidget {
-  _CalendarHeader();
+  const _CalendarHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _CalendarHeader extends StatelessWidget {
 }
 
 class _WeekdayHeader extends StatelessWidget {
-  _WeekdayHeader();
+  const _WeekdayHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class _WeekdayHeader extends StatelessWidget {
 class _Weekday extends StatelessWidget {
   final String label;
 
-  _Weekday(this.label);
+  const _Weekday(this.label);
 
   @override
   Widget build(BuildContext context) {
@@ -116,17 +116,17 @@ class _Weekday extends StatelessWidget {
 class _CalendarDayTile extends StatelessWidget {
   final CalendarDayData day;
 
-  _CalendarDayTile(this.day);
+  const _CalendarDayTile(this.day);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: day.isMuted ? Color(0xFFF9F7FC) : Colors.white,
+        color: day.isMuted ? AppColors.surfaceAlt : AppColors.surface,
         borderRadius: BorderRadius.circular(9),
         border: Border.all(
-          color: day.isToday ? AppColors.primary : Color(0xFFEDE7F8),
+          color: day.isToday ? AppColors.primary : AppColors.border,
           width: day.isToday ? 1.4 : 1,
         ),
       ),
@@ -139,9 +139,7 @@ class _CalendarDayTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: day.isMuted
-                    ? Color(0xFFB7B0C4)
-                    : AppColors.textPrimary,
+                color: day.isMuted ? Color(0xFFB7B0C4) : AppColors.textPrimary,
               ),
             ),
           ),
@@ -196,7 +194,7 @@ class _CalendarDayTile extends StatelessWidget {
 class _ImpactCounts extends StatelessWidget {
   final CalendarDayData day;
 
-  _ImpactCounts(this.day);
+  const _ImpactCounts(this.day);
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +216,7 @@ class _ImpactCount extends StatelessWidget {
   final Color color;
   final int count;
 
-  _ImpactCount(this.color, this.count);
+  const _ImpactCount(this.color, this.count);
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +249,7 @@ class _LegendDot extends StatelessWidget {
   final Color color;
   final String label;
 
-  _LegendDot(this.color, this.label);
+  const _LegendDot(this.color, this.label);
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +277,7 @@ class _LegendDot extends StatelessWidget {
 class _NavButton extends StatelessWidget {
   final IconData icon;
 
-  _NavButton(this.icon);
+  const _NavButton(this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +297,7 @@ class _NavButton extends StatelessWidget {
 
 BoxDecoration _panelDecoration() {
   return BoxDecoration(
-    color: Colors.white.withValues(alpha: 0.96),
+    color: AppColors.surface.withValues(alpha: 0.96),
     borderRadius: BorderRadius.circular(12),
     border: Border.all(color: AppColors.border),
     boxShadow: [

@@ -8,7 +8,7 @@ class MetricCard extends StatelessWidget {
   final Color? valueColor;
   final Widget? trailing;
 
-  MetricCard({
+  const MetricCard({
     super.key,
     required this.title,
     required this.value,
@@ -23,9 +23,9 @@ class MetricCard extends StatelessWidget {
       height: 120,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
@@ -73,11 +73,7 @@ class MetricCard extends StatelessWidget {
           ),
           if (trailing != null) ...[
             SizedBox(width: 12),
-            SizedBox(
-              width: 36,
-              height: 36,
-              child: Center(child: trailing!),
-            ),
+            SizedBox(width: 36, height: 36, child: Center(child: trailing!)),
           ],
         ],
       ),

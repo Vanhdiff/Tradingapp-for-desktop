@@ -7,13 +7,13 @@ import '../widgets/recent_trades_table.dart';
 import '../widgets/rule_break_panel.dart';
 
 class DashboardPage extends StatelessWidget {
-  DashboardPage({super.key});
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        horizontalPadding = 22.0;
+        final horizontalPadding = 22.0;
         final contentWidth = constraints.maxWidth - horizontalPadding * 2;
         final targetWidth = contentWidth * 0.9;
         final pageWidth = targetWidth < 1120 ? 1120.0 : targetWidth;
@@ -73,7 +73,7 @@ class DashboardPage extends StatelessWidget {
 }
 
 class _DashboardHeader extends StatelessWidget {
-  _DashboardHeader();
+  const _DashboardHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _DashboardHeader extends StatelessWidget {
 }
 
 class _TimeRangeFilter extends StatelessWidget {
-  _TimeRangeFilter();
+  const _TimeRangeFilter();
 
   @override
   Widget build(BuildContext context) {
@@ -128,17 +128,17 @@ class _RangeButton extends StatelessWidget {
   final String label;
   final bool selected;
 
-  _RangeButton(this.label, {this.selected = false});
+  const _RangeButton(this.label, {this.selected = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? AppColors.primary : Colors.white,
+        color: selected ? AppColors.primary : AppColors.surface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selected ? AppColors.primary : Color(0xFFE8E3F3),
+          color: selected ? AppColors.primary : AppColors.border,
         ),
       ),
       child: Text(
@@ -154,7 +154,7 @@ class _RangeButton extends StatelessWidget {
 }
 
 class _RiskCoachBanner extends StatelessWidget {
-  _RiskCoachBanner();
+  const _RiskCoachBanner();
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +163,9 @@ class _RiskCoachBanner extends StatelessWidget {
       height: 38,
       padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: Color(0xFFFFF2F5),
+        color: AppColors.danger.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Color(0xFFF2E2E8)),
+        border: Border.all(color: AppColors.danger.withValues(alpha: 0.20)),
       ),
       child: Row(
         children: [

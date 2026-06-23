@@ -20,7 +20,7 @@ class JournalReviewPanel extends StatelessWidget {
   final ValueChanged<String> onEntryEmotionChanged;
   final ValueChanged<String> onExitEmotionChanged;
 
-  JournalReviewPanel({
+  const JournalReviewPanel({
     super.key,
     required this.reflectionController,
     required this.followedPlan,
@@ -131,7 +131,7 @@ class JournalReviewPanel extends StatelessWidget {
 class _PlanCheckbox extends StatelessWidget {
   final JournalReviewPanel panel;
 
-  _PlanCheckbox(this.panel);
+  const _PlanCheckbox(this.panel);
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class _PlanCheckbox extends StatelessWidget {
 }
 
 class _TradeManagementField extends StatelessWidget {
-  _TradeManagementField();
+  const _TradeManagementField();
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +177,7 @@ class _TradeManagementField extends StatelessWidget {
 }
 
 class _MistakesField extends StatelessWidget {
-  _MistakesField();
+  const _MistakesField();
 
   @override
   Widget build(BuildContext context) {

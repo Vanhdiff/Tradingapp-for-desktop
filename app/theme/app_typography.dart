@@ -26,10 +26,7 @@ abstract class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  static TextStyle body = TextStyle(
-    fontSize: 14,
-    color: AppColors.textPrimary,
-  );
+  static TextStyle body = TextStyle(fontSize: 14, color: AppColors.textPrimary);
 
   static TextStyle muted = TextStyle(
     fontSize: 12,

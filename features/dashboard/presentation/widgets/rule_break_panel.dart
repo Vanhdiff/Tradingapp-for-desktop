@@ -3,7 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class RuleBreakPanel extends StatelessWidget {
-  RuleBreakPanel({super.key});
+  const RuleBreakPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +11,9 @@ class RuleBreakPanel extends StatelessWidget {
       constraints: BoxConstraints(minHeight: 310),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x12000000),
@@ -45,7 +45,7 @@ class RuleBreakPanel extends StatelessWidget {
 }
 
 class _PanelHeader extends StatelessWidget {
-  _PanelHeader();
+  const _PanelHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class _PanelHeader extends StatelessWidget {
 }
 
 class _PanelTitle extends StatelessWidget {
-  _PanelTitle();
+  const _PanelTitle();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class _PanelTitle extends StatelessWidget {
 }
 
 class _TradesProgress extends StatelessWidget {
-  _TradesProgress();
+  const _TradesProgress();
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class _TradesProgress extends StatelessWidget {
 }
 
 class _TradingWindowRow extends StatelessWidget {
-  _TradingWindowRow();
+  const _TradingWindowRow();
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,7 @@ class _TradingWindowRow extends StatelessWidget {
 }
 
 class _ClosedPnlSection extends StatelessWidget {
-  _ClosedPnlSection();
+  const _ClosedPnlSection();
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +223,7 @@ class _ClosedPnlSection extends StatelessWidget {
 }
 
 class _LossProgressBar extends StatelessWidget {
-  _LossProgressBar();
+  const _LossProgressBar();
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +231,7 @@ class _LossProgressBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(999),
       child: Container(
         height: 10,
-        color: Color(0xFFFFE6E8),
+        color: AppColors.danger.withValues(alpha: 0.14),
         child: Align(
           alignment: Alignment.centerLeft,
           child: FractionallySizedBox(
@@ -245,7 +245,7 @@ class _LossProgressBar extends StatelessWidget {
 }
 
 class _LimitLabels extends StatelessWidget {
-  _LimitLabels();
+  const _LimitLabels();
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +276,7 @@ class _LimitLabels extends StatelessWidget {
 }
 
 class _MaxLossAlert extends StatelessWidget {
-  _MaxLossAlert();
+  const _MaxLossAlert();
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +284,7 @@ class _MaxLossAlert extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Color(0xFFFFF1F1),
+        color: AppColors.danger.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

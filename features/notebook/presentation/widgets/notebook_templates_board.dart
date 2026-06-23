@@ -8,7 +8,7 @@ class NotebookTemplatesBoard extends StatefulWidget {
   final String? selectedTemplateTitle;
   final ValueChanged<NotebookTemplate> onTemplateSelected;
 
-  NotebookTemplatesBoard({
+  const NotebookTemplatesBoard({
     super.key,
     required this.templates,
     required this.selectedTemplateTitle,
@@ -34,7 +34,7 @@ class _NotebookTemplatesBoardState extends State<NotebookTemplatesBoard> {
       constraints: BoxConstraints(minHeight: 820),
       padding: EdgeInsets.fromLTRB(22, 20, 22, 22),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.92),
+        color: AppColors.surface.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.border),
         boxShadow: [
@@ -90,7 +90,7 @@ class _PinnedTemplateRow extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  _PinnedTemplateRow({required this.expanded, required this.onToggle});
+  const _PinnedTemplateRow({required this.expanded, required this.onToggle});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +131,7 @@ class _TemplateSection extends StatelessWidget {
   final String? selectedTemplateTitle;
   final ValueChanged<NotebookTemplate> onTemplateSelected;
 
-  _TemplateSection({
+  const _TemplateSection({
     required this.title,
     required this.templates,
     required this.expanded,
@@ -181,7 +181,7 @@ class _SectionTitle extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  _SectionTitle(
+  const _SectionTitle(
     this.title,
     this.count, {
     required this.expanded,
@@ -222,7 +222,7 @@ class _TemplateCard extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  _TemplateCard({
+  const _TemplateCard({
     required this.template,
     required this.selected,
     required this.onTap,
@@ -239,7 +239,7 @@ class _TemplateCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? AppColors.primarySoft
-              : Colors.white.withValues(alpha: 0.82),
+              : AppColors.surface.withValues(alpha: 0.82),
           borderRadius: BorderRadius.circular(7),
           border: Border.all(
             color: selected ? AppColors.primary : AppColors.border,
@@ -284,14 +284,14 @@ class _TemplateCard extends StatelessWidget {
 class _DocumentPreview extends StatelessWidget {
   final Color accent;
 
-  _DocumentPreview({required this.accent});
+  const _DocumentPreview({required this.accent});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: AppColors.border),
       ),
@@ -347,7 +347,7 @@ class _DocumentPreview extends StatelessWidget {
 class _PreviewLine extends StatelessWidget {
   final double width;
 
-  _PreviewLine({required this.width});
+  const _PreviewLine({required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -366,7 +366,7 @@ class _PreviewLine extends StatelessWidget {
 }
 
 class _PreviewCheck extends StatelessWidget {
-  _PreviewCheck();
+  const _PreviewCheck();
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +382,7 @@ class _PreviewCheck extends StatelessWidget {
 }
 
 class _TinyDot extends StatelessWidget {
-  _TinyDot();
+  const _TinyDot();
 
   @override
   Widget build(BuildContext context) {

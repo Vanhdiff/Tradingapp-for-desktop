@@ -101,15 +101,16 @@ class ShellSidebar extends StatelessWidget {
                   Container(
                     width: 20,
                     height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF2D2D2D),
+                    decoration: BoxDecoration(
+                      color: theme.hover,
                       shape: BoxShape.circle,
+                      border: Border.all(color: theme.border),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
+                    child: Text(
                       'V',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: theme.textPrimary,
                         fontSize: 8,
                         fontWeight: FontWeight.w700,
                       ),

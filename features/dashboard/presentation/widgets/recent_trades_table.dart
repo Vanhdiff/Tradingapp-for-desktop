@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class RecentTradesTable extends StatelessWidget {
-  RecentTradesTable({super.key});
+  const RecentTradesTable({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +10,9 @@ class RecentTradesTable extends StatelessWidget {
       height: 310,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x12000000),
@@ -49,7 +49,7 @@ class RecentTradesTable extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFF7F4FF),
+              color: AppColors.surfaceAlt,
               borderRadius: BorderRadius.circular(14),
             ),
             child: Row(
@@ -63,27 +63,9 @@ class RecentTradesTable extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          _TradeRow(
-            'EURUSD',
-            'Sell',
-            r'-$1,500.00',
-            'Loss',
-            'Today, 11:15 AM',
-          ),
-          _TradeRow(
-            'GBPJPY',
-            'Sell',
-            r'-$1,250.00',
-            'Loss',
-            'Today, 10:48 AM',
-          ),
-          _TradeRow(
-            'XAUUSD',
-            'Sell',
-            r'-$600.00',
-            'Loss',
-            'Today, 10:05 AM',
-          ),
+          _TradeRow('EURUSD', 'Sell', r'-$1,500.00', 'Loss', 'Today, 11:15 AM'),
+          _TradeRow('GBPJPY', 'Sell', r'-$1,250.00', 'Loss', 'Today, 10:48 AM'),
+          _TradeRow('XAUUSD', 'Sell', r'-$600.00', 'Loss', 'Today, 10:05 AM'),
           _TradeRow('AUDUSD', 'Buy', r'+$64.60', 'Win', 'Today, 9:42 AM'),
           _TradeRow('USDCAD', 'Sell', r'$0.00', 'BE', 'Today, 9:12 AM'),
         ],
@@ -94,7 +76,7 @@ class RecentTradesTable extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final String text;
-  _Header(this.text);
+  const _Header(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +98,7 @@ class _TradeRow extends StatelessWidget {
   final String outcome;
   final String closedAt;
 
-  _TradeRow(
+  const _TradeRow(
     this.instrument,
     this.direction,
     this.pnl,
@@ -177,8 +159,8 @@ class _TradeRow extends StatelessWidget {
                   color: isWin
                       ? Color(0xFFEAF8F1)
                       : isLoss
-                      ? Color(0xFFFFEEEE)
-                      : Color(0xFFF1F1F4),
+                      ? AppColors.danger.withValues(alpha: 0.14)
+                      : AppColors.surfaceAlt,
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -200,10 +182,7 @@ class _TradeRow extends StatelessWidget {
             flex: 2,
             child: Text(
               closedAt,
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.textSecondary,
-              ),
+              style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
             ),
           ),
         ],
@@ -213,7 +192,7 @@ class _TradeRow extends StatelessWidget {
 }
 
 class _PairDot extends StatelessWidget {
-  _PairDot();
+  const _PairDot();
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +209,7 @@ class _PairDot extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color(0xFF2979FF),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 1),
+                border: Border.all(color: AppColors.surface, width: 1),
               ),
             ),
           ),
@@ -242,7 +221,7 @@ class _PairDot extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color(0xFFE53935),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 1),
+                border: Border.all(color: AppColors.surface, width: 1),
               ),
             ),
           ),

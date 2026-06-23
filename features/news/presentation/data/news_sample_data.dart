@@ -95,7 +95,7 @@ abstract final class NewsSampleData {
     CalendarDayData(day: 1, isMuted: true, lowImpact: 2),
   ];
 
-  static const todayEvents = [
+  static List<NewsEventData> get todayEvents => [
     NewsEventData(
       time: '+ 08:30',
       currency: '🇺🇸 USD',
@@ -143,7 +143,7 @@ abstract final class NewsSampleData {
     ),
   ];
 
-  static const upcomingEvents = [
+  static List<NewsEventData> get upcomingEvents => [
     NewsEventData(
       time: '+ 09:00',
       currency: '🇮🇳 INR',

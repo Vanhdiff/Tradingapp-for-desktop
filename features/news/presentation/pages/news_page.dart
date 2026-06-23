@@ -61,7 +61,7 @@ class _NewsPageState extends State<NewsPage> {
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               NewsCalendarPanel(
@@ -74,7 +74,7 @@ class _NewsPageState extends State<NewsPage> {
                             ],
                           ),
                           if (_showListNotice)
-                            const Positioned(
+                            Positioned(
                               top: 0,
                               right: 0,
                               child: SizedBox(

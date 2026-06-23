@@ -7,7 +7,7 @@ class ShellNavItem extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  ShellNavItem({
+  const ShellNavItem({
     super.key,
     required this.icon,
     required this.label,

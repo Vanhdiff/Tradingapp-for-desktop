@@ -9,7 +9,7 @@ class JournalTradeDetailsPanel extends StatelessWidget {
   final String direction;
   final String lotSize;
 
-  JournalTradeDetailsPanel({
+  const JournalTradeDetailsPanel({
     super.key,
     required this.netPnl,
     required this.instrument,
@@ -80,7 +80,7 @@ class JournalTradeDetailsPanel extends StatelessWidget {
 }
 
 class _BrokerCallout extends StatelessWidget {
-  _BrokerCallout();
+  const _BrokerCallout();
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _TradeMetric extends StatelessWidget {
   final String value;
   final String label;
 
-  _TradeMetric(this.value, this.label);
+  const _TradeMetric(this.value, this.label);
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +135,7 @@ class _DetailsSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
-  _DetailsSection(this.title, this.children);
+  const _DetailsSection(this.title, this.children);
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +162,7 @@ class _DetailRow extends StatelessWidget {
   final String value;
   final Color? valueColor;
 
-  _DetailRow(this.label, this.value, {this.valueColor});
+  const _DetailRow(this.label, this.value, {this.valueColor});
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +173,7 @@ class _DetailRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
           ),
           Text(

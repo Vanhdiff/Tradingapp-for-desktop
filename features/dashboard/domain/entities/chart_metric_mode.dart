@@ -1,5 +1,1 @@
-enum ChartMetricMode {
-  currency,
-  rMultiple,
-  percent,
-}
+enum ChartMetricMode { currency, rMultiple, percent }

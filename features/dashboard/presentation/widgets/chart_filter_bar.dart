@@ -9,7 +9,7 @@ class ChartFilterBar extends StatelessWidget {
   final ValueChanged<ChartRange> onRangeChanged;
   final ValueChanged<ChartMetricMode> onModeChanged;
 
-  ChartFilterBar({
+  const ChartFilterBar({
     super.key,
     required this.selectedRange,
     required this.selectedMode,
@@ -84,7 +84,7 @@ class _RangeChip extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  _RangeChip({
+  const _RangeChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -97,10 +97,10 @@ class _RangeChip extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.white,
+          color: selected ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? AppColors.primary : Color(0xFFE8E3F3),
+            color: selected ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Text(
@@ -121,7 +121,7 @@ class _MiniChip extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  _MiniChip({
+  const _MiniChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -136,10 +136,10 @@ class _MiniChip extends StatelessWidget {
         height: 20,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? AppColors.primarySoft : Colors.white,
+          color: selected ? AppColors.primarySoft : AppColors.surface,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? AppColors.primary : Color(0xFFE8E3F3),
+            color: selected ? AppColors.primary : AppColors.border,
           ),
         ),
         child: Text(

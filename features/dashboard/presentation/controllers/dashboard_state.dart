@@ -3,9 +3,7 @@ import '../../domain/entities/dashboard_summary.dart';
 class DashboardState {
   final DashboardSummary summary;
 
-  const DashboardState({
-    required this.summary,
-  });
+  const DashboardState({required this.summary});
 
   factory DashboardState.mock() {
     return const DashboardState(

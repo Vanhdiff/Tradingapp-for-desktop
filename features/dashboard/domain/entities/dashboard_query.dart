@@ -5,10 +5,7 @@ class DashboardQuery {
   final ChartRange range;
   final ChartMetricMode mode;
 
-  const DashboardQuery({
-    required this.range,
-    required this.mode,
-  });
+  const DashboardQuery({required this.range, required this.mode});
 
   factory DashboardQuery.initial() {
     return const DashboardQuery(
@@ -17,13 +14,7 @@ class DashboardQuery {
     );
   }
 
-  DashboardQuery copyWith({
-    ChartRange? range,
-    ChartMetricMode? mode,
-  }) {
-    return DashboardQuery(
-      range: range ?? this.range,
-      mode: mode ?? this.mode,
-    );
+  DashboardQuery copyWith({ChartRange? range, ChartMetricMode? mode}) {
+    return DashboardQuery(range: range ?? this.range, mode: mode ?? this.mode);
   }
 }

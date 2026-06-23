@@ -5,7 +5,7 @@ import '../../../../shared/widgets/app_panel.dart';
 import 'journal_shared_widgets.dart';
 
 class JournalChartsPanel extends StatelessWidget {
-  JournalChartsPanel({super.key});
+  const JournalChartsPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _ChartCard extends StatelessWidget {
   final String count;
   final bool withActions;
 
-  _ChartCard(this.label, this.count, {this.withActions = false});
+  const _ChartCard(this.label, this.count, {this.withActions = false});
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +68,11 @@ class _ChartCard extends StatelessWidget {
               if (withActions)
                 Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.45),
+                      color: AppColors.isDark
+                          ? AppColors.surfaceAlt.withValues(alpha: 0.78)
+                          : Colors.black.withValues(alpha: 0.45),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
@@ -88,7 +87,9 @@ class _ChartCard extends StatelessWidget {
                 bottom: 0,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 7),
-                  color: Colors.black.withValues(alpha: 0.44),
+                  color: AppColors.isDark
+                      ? AppColors.surfaceAlt.withValues(alpha: 0.78)
+                      : Colors.black.withValues(alpha: 0.44),
                   alignment: Alignment.center,
                   child: Text(
                     count,
@@ -111,7 +112,7 @@ class _ChartCard extends StatelessWidget {
 class _UploadChartCard extends StatelessWidget {
   final String label;
 
-  _UploadChartCard(this.label);
+  const _UploadChartCard(this.label);
 
   @override
   Widget build(BuildContext context) {

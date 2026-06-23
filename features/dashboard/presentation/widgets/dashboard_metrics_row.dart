@@ -6,10 +6,7 @@ import '../controllers/dashboard_state.dart';
 class DashboardMetricsRow extends StatelessWidget {
   final DashboardState state;
 
-  DashboardMetricsRow({
-    super.key,
-    required this.state,
-  });
+  const DashboardMetricsRow({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {

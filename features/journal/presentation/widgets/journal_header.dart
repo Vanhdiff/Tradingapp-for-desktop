@@ -6,7 +6,7 @@ import 'journal_shared_widgets.dart';
 class JournalHeader extends StatelessWidget {
   final String title;
 
-  JournalHeader({super.key, required this.title});
+  const JournalHeader({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +38,7 @@ class JournalHeader extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(width: 12),
                   JournalPill(

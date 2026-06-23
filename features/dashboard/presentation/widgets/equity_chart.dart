@@ -5,7 +5,7 @@ import '../../domain/entities/dashboard_query.dart';
 import 'chart_filter_bar.dart';
 
 class EquityChart extends StatefulWidget {
-  EquityChart({super.key});
+  const EquityChart({super.key});
 
   @override
   State<EquityChart> createState() => _EquityChartState();
@@ -20,9 +20,9 @@ class _EquityChartState extends State<EquityChart> {
       height: 310,
       padding: EdgeInsets.fromLTRB(18, 18, 18, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x12000000),
@@ -87,14 +87,14 @@ class _CompactChartPainter extends CustomPainter {
     final chartHeight = size.height - bottomPad;
 
     final gridPaint = Paint()
-      ..color = Color(0xFFF0ECF6)
+      ..color = AppColors.border
       ..strokeWidth = 1;
 
     final axisPaint = Paint()
       ..color = Color(0xFFE6E0F0)
       ..strokeWidth = 1;
 
-    textStyle = TextStyle(
+    final textStyle = TextStyle(
       color: Color(0xFFB0A8BE),
       fontSize: 8,
       fontWeight: FontWeight.w500,

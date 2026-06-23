@@ -14,7 +14,7 @@ import 'widgets/shell_topbar.dart';
 import 'widgets/theme_picker_bar.dart';
 
 class MainShell extends StatefulWidget {
-  MainShell({super.key});
+  const MainShell({super.key});
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -120,60 +120,69 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     return NavigationView(
-      content: Stack(
-        children: [
-          Container(
-            color: _selectedTheme.bg,
-            child: Row(
-              children: [
-                ShellSidebar(
-                  currentRoute: currentRoute,
-                  isCollapsed: sidebarCollapsed,
-                  theme: _selectedTheme,
-                  onNavigate: navigateTo,
-                  onPointerEnter: _handleSidebarEnter,
-                  onPointerExit: _handleSidebarExit,
-                  onThemePressed: _toggleThemePicker,
-                  onToggleCollapsed: _toggleSidebarCollapsed,
+      content: DefaultTextStyle(
+        style: TextStyle(color: _selectedTheme.textPrimary),
+        child: IconTheme(
+          data: IconThemeData(color: _selectedTheme.textSecondary),
+          child: Stack(
+            children: [
+              Container(
+                color: _selectedTheme.bg,
+                child: Row(
+                  children: [
+                    ShellSidebar(
+                      currentRoute: currentRoute,
+                      isCollapsed: sidebarCollapsed,
+                      theme: _selectedTheme,
+                      onNavigate: navigateTo,
+                      onPointerEnter: _handleSidebarEnter,
+                      onPointerExit: _handleSidebarExit,
+                      onThemePressed: _toggleThemePicker,
+                      onToggleCollapsed: _toggleSidebarCollapsed,
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 14, 14, 14),
+                        decoration: BoxDecoration(
+                          color: _selectedTheme.shellBg,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Column(
+                          children: [
+                            ShellTopbar(
+                              title: pageTitle,
+                              theme: _selectedTheme,
+                            ),
+                            Expanded(child: currentPage),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 14, 14, 14),
-                    decoration: BoxDecoration(
-                      color: _selectedTheme.shellBg,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Column(
-                      children: [
-                        ShellTopbar(title: pageTitle, theme: _selectedTheme),
-                        Expanded(child: currentPage),
-                      ],
-                    ),
+              ),
+              if (_showThemePicker)
+                Positioned(
+                  top: 286,
+                  left: sidebarCollapsed ? 46 : 66,
+                  width: 236,
+                  child: ThemePickerBar(
+                    presets: AppThemePalettes.all,
+                    selected: _selectedTheme,
+                    onSelected: (theme) {
+                      setState(() {
+                        _selectedTheme = theme;
+                        AppColors.use(theme);
+                      });
+                    },
+                    onClose: () {
+                      setState(() => _showThemePicker = false);
+                    },
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
-          if (_showThemePicker)
-            Positioned(
-              top: 286,
-              left: sidebarCollapsed ? 46 : 66,
-              width: 236,
-              child: ThemePickerBar(
-                presets: AppThemePalettes.all,
-                selected: _selectedTheme,
-                onSelected: (theme) {
-                  setState(() {
-                    _selectedTheme = theme;
-                    AppColors.use(theme);
-                  });
-                },
-                onClose: () {
-                  setState(() => _showThemePicker = false);
-                },
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

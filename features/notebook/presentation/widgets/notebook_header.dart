@@ -3,7 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class NotebookHeader extends StatelessWidget {
-  NotebookHeader({super.key});
+  const NotebookHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

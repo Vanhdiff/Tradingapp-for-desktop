@@ -3,7 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class DisciplinePanel extends StatelessWidget {
-  DisciplinePanel({super.key});
+  const DisciplinePanel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +11,9 @@ class DisciplinePanel extends StatelessWidget {
       height: 330,
       padding: EdgeInsets.fromLTRB(20, 18, 20, 18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Color(0xFFEEE8F8)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Color(0x12000000),
@@ -36,19 +36,12 @@ class DisciplinePanel extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Icon(
-                FluentIcons.info,
-                size: 14,
-                color: AppColors.textSecondary,
-              ),
+              Icon(FluentIcons.info, size: 14, color: AppColors.textSecondary),
               Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFF4DF),
+                  color: AppColors.warning.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -141,7 +134,7 @@ class _MetricRow extends StatelessWidget {
   final double value;
   final Color color;
 
-  _MetricRow(this.label, this.score, this.value, this.color);
+  const _MetricRow(this.label, this.score, this.value, this.color);
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +173,7 @@ class _MetricRow extends StatelessWidget {
         Container(
           height: 6,
           decoration: BoxDecoration(
-            color: Color(0xFFF2EEF8),
+            color: AppColors.border,
             borderRadius: BorderRadius.circular(999),
           ),
           child: Align(
@@ -206,7 +199,7 @@ class _StatRow extends StatelessWidget {
   final String value;
   final Widget? trailing;
 
-  _StatRow(this.label, this.value, {this.trailing});
+  const _StatRow(this.label, this.value, {this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +208,7 @@ class _StatRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 10,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 10, color: AppColors.textSecondary),
           ),
         ),
         Text(
@@ -236,7 +226,7 @@ class _StatRow extends StatelessWidget {
 }
 
 class _ScoreColumn extends StatelessWidget {
-  _ScoreColumn();
+  const _ScoreColumn();
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +256,7 @@ class _ScoreColumn extends StatelessWidget {
 class _ScoreRing extends StatelessWidget {
   final int score;
 
-  _ScoreRing({required this.score});
+  const _ScoreRing({required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -306,12 +296,12 @@ class _ScoreRingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    stroke = 8.0;
+    final stroke = 8.0;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - stroke) / 2;
 
     final bgPaint = Paint()
-      ..color = Color(0xFFF2EEF8)
+      ..color = AppColors.border
       ..strokeWidth = stroke
       ..style = PaintingStyle.stroke;
 

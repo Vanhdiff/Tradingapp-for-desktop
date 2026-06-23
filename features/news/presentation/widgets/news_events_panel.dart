@@ -6,7 +6,7 @@ import '../data/news_sample_data.dart';
 class NewsEventsPanel extends StatelessWidget {
   final List<NewsEventData> events;
 
-  NewsEventsPanel({super.key, required this.events});
+  const NewsEventsPanel({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class NewsEventsPanel extends StatelessWidget {
 class UpcomingEventsPanel extends StatelessWidget {
   final List<NewsEventData> events;
 
-  UpcomingEventsPanel({super.key, required this.events});
+  const UpcomingEventsPanel({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class UpcomingEventsPanel extends StatelessWidget {
 class CurrencyWatchlistPanel extends StatelessWidget {
   final List<String> currencies;
 
-  CurrencyWatchlistPanel({super.key, required this.currencies});
+  const CurrencyWatchlistPanel({super.key, required this.currencies});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class CurrencyWatchlistPanel extends StatelessWidget {
 class _EventHeader extends StatelessWidget {
   final bool compact;
 
-  _EventHeader({this.compact = false});
+  const _EventHeader({this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -144,14 +144,14 @@ class _EventRow extends StatelessWidget {
   final NewsEventData event;
   final bool compact;
 
-  _EventRow(this.event, {this.compact = false});
+  const _EventRow(this.event, {this.compact = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 9),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF0ECF7))),
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -198,7 +198,7 @@ class _EventRow extends StatelessWidget {
 class _CurrencyChip extends StatelessWidget {
   final String currency;
 
-  _CurrencyChip(this.currency);
+  const _CurrencyChip(this.currency);
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +206,7 @@ class _CurrencyChip extends StatelessWidget {
       margin: EdgeInsets.only(left: 10),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 9),
       decoration: BoxDecoration(
-        color: currency == 'USD' ? AppColors.primarySoft : Colors.white,
+        color: currency == 'USD' ? AppColors.primarySoft : AppColors.surface,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: currency == 'USD' ? AppColors.primary : AppColors.border,
@@ -224,11 +224,7 @@ class _CurrencyChip extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          Icon(
-            FluentIcons.cancel,
-            size: 10,
-            color: AppColors.textSecondary,
-          ),
+          Icon(FluentIcons.cancel, size: 10, color: AppColors.textSecondary),
         ],
       ),
     );
@@ -238,7 +234,7 @@ class _CurrencyChip extends StatelessWidget {
 class _HeaderText extends StatelessWidget {
   final String text;
 
-  _HeaderText(this.text);
+  const _HeaderText(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +254,7 @@ class _CellText extends StatelessWidget {
   final bool strong;
   final Color? color;
 
-  _CellText(this.text, {this.strong = false, this.color});
+  const _CellText(this.text, {this.strong = false, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +272,7 @@ class _CellText extends StatelessWidget {
 }
 
 class _TodayPill extends StatelessWidget {
-  _TodayPill();
+  const _TodayPill();
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +298,7 @@ class _TodayPill extends StatelessWidget {
 class _NavButton extends StatelessWidget {
   final IconData icon;
 
-  _NavButton(this.icon);
+  const _NavButton(this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +318,7 @@ class _NavButton extends StatelessWidget {
 
 BoxDecoration _panelDecoration() {
   return BoxDecoration(
-    color: Colors.white.withValues(alpha: 0.96),
+    color: AppColors.surface.withValues(alpha: 0.96),
     borderRadius: BorderRadius.circular(12),
     border: Border.all(color: AppColors.border),
     boxShadow: [
