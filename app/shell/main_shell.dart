@@ -172,6 +172,7 @@ class _MainShellState extends State<MainShell> {
                     onSelected: (theme) {
                       setState(() {
                         _selectedTheme = theme;
+                        _showThemePicker = false;
                         AppColors.use(theme);
                       });
                     },

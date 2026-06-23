@@ -5,8 +5,9 @@ import 'journal_shared_widgets.dart';
 
 class JournalHeader extends StatelessWidget {
   final String title;
+  final VoidCallback? onBack;
 
-  const JournalHeader({super.key, required this.title});
+  const JournalHeader({super.key, required this.title, this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class JournalHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Button(
-                onPressed: () {},
+                onPressed: onBack ?? () {},
                 style: ButtonStyle(
                   padding: WidgetStatePropertyAll(
                     EdgeInsets.symmetric(horizontal: 8, vertical: 4),
