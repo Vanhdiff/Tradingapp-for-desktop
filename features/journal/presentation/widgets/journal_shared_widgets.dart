@@ -5,15 +5,15 @@ import '../../../../app/theme/app_colors.dart';
 class JournalSectionLabel extends StatelessWidget {
   final String text;
 
-  const JournalSectionLabel(this.text, {super.key});
+  JournalSectionLabel(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: EdgeInsets.only(bottom: 7),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: AppColors.textSecondary,
@@ -29,7 +29,7 @@ class JournalComboField extends StatelessWidget {
   final List<String> items;
   final ValueChanged<String> onChanged;
 
-  const JournalComboField({
+  JournalComboField({
     super.key,
     required this.label,
     required this.value,
@@ -61,7 +61,7 @@ class JournalFieldShell extends StatelessWidget {
   final String label;
   final Widget child;
 
-  const JournalFieldShell({
+  JournalFieldShell({
     super.key,
     required this.label,
     required this.child,
@@ -80,12 +80,12 @@ class JournalMiniTag extends StatelessWidget {
   final String label;
   final bool removable;
 
-  const JournalMiniTag(this.label, {super.key, this.removable = false});
+  JournalMiniTag(this.label, {super.key, this.removable = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.shellBg,
         borderRadius: BorderRadius.circular(6),
@@ -96,11 +96,11 @@ class JournalMiniTag extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
           if (removable) ...[
-            const SizedBox(width: 6),
-            const Icon(
+            SizedBox(width: 6),
+            Icon(
               FluentIcons.cancel,
               size: 10,
               color: AppColors.textSecondary,
@@ -117,7 +117,7 @@ class JournalOutlineAction extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
 
-  const JournalOutlineAction({
+  JournalOutlineAction({
     super.key,
     required this.icon,
     required this.label,
@@ -129,7 +129,7 @@ class JournalOutlineAction extends StatelessWidget {
     return Button(
       onPressed: onPressed ?? () {},
       style: ButtonStyle(
-        padding: const WidgetStatePropertyAll(
+        padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         ),
       ),
@@ -137,10 +137,10 @@ class JournalOutlineAction extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 12, color: AppColors.primary),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             label,
-            style: const TextStyle(color: AppColors.primary, fontSize: 12),
+            style: TextStyle(color: AppColors.primary, fontSize: 12),
           ),
         ],
       ),
@@ -151,18 +151,18 @@ class JournalOutlineAction extends StatelessWidget {
 class JournalPill extends StatelessWidget {
   final Widget child;
 
-  const JournalPill({super.key, required this.child});
+  JournalPill({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: AppColors.shellBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: DefaultTextStyle(
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textSecondary,
           fontSize: 12,
           fontWeight: FontWeight.w600,

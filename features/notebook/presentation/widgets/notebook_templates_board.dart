@@ -8,7 +8,7 @@ class NotebookTemplatesBoard extends StatefulWidget {
   final String? selectedTemplateTitle;
   final ValueChanged<NotebookTemplate> onTemplateSelected;
 
-  const NotebookTemplatesBoard({
+  NotebookTemplatesBoard({
     super.key,
     required this.templates,
     required this.selectedTemplateTitle,
@@ -31,8 +31,8 @@ class _NotebookTemplatesBoardState extends State<NotebookTemplatesBoard> {
     }
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 820),
-      padding: const EdgeInsets.fromLTRB(22, 20, 22, 22),
+      constraints: BoxConstraints(minHeight: 820),
+      padding: EdgeInsets.fromLTRB(22, 20, 22, 22),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(10),
@@ -41,14 +41,14 @@ class _NotebookTemplatesBoardState extends State<NotebookTemplatesBoard> {
           BoxShadow(
             color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 18,
-            offset: const Offset(0, 10),
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Templates',
             style: TextStyle(
               fontSize: 21,
@@ -56,12 +56,12 @@ class _NotebookTemplatesBoardState extends State<NotebookTemplatesBoard> {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           _PinnedTemplateRow(
             expanded: _showPinned,
             onToggle: () => setState(() => _showPinned = !_showPinned),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ...groupedTemplates.entries.map(
             (entry) => _TemplateSection(
               title: entry.key,
@@ -90,7 +90,7 @@ class _PinnedTemplateRow extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  const _PinnedTemplateRow({required this.expanded, required this.onToggle});
+  _PinnedTemplateRow({required this.expanded, required this.onToggle});
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +106,10 @@ class _PinnedTemplateRow extends StatelessWidget {
             size: 12,
             color: AppColors.textSecondary,
           ),
-          const SizedBox(width: 8),
-          const Icon(FluentIcons.pin, size: 13, color: AppColors.textSecondary),
-          const SizedBox(width: 8),
-          const Text(
+          SizedBox(width: 8),
+          Icon(FluentIcons.pin, size: 13, color: AppColors.textSecondary),
+          SizedBox(width: 8),
+          Text(
             'Pinned Templates',
             style: TextStyle(
               fontSize: 13,
@@ -131,7 +131,7 @@ class _TemplateSection extends StatelessWidget {
   final String? selectedTemplateTitle;
   final ValueChanged<NotebookTemplate> onTemplateSelected;
 
-  const _TemplateSection({
+  _TemplateSection({
     required this.title,
     required this.templates,
     required this.expanded,
@@ -143,7 +143,7 @@ class _TemplateSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -154,7 +154,7 @@ class _TemplateSection extends StatelessWidget {
             onToggle: onToggle,
           ),
           if (expanded) ...[
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             Wrap(
               spacing: 16,
               runSpacing: 16,
@@ -181,7 +181,7 @@ class _SectionTitle extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  const _SectionTitle(
+  _SectionTitle(
     this.title,
     this.count, {
     required this.expanded,
@@ -202,10 +202,10 @@ class _SectionTitle extends StatelessWidget {
             size: 12,
             color: AppColors.textSecondary,
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             '$title  $count',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -222,7 +222,7 @@ class _TemplateCard extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _TemplateCard({
+  _TemplateCard({
     required this.template,
     required this.selected,
     required this.onTap,
@@ -235,7 +235,7 @@ class _TemplateCard extends StatelessWidget {
       child: Container(
         width: 300,
         height: 184,
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.primarySoft
@@ -252,27 +252,27 @@ class _TemplateCard extends StatelessWidget {
             Row(
               children: [
                 Icon(template.icon, size: 14, color: template.accent),
-                const SizedBox(width: 7),
+                SizedBox(width: 7),
                 Expanded(
                   child: Text(
                     template.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
                     ),
                   ),
                 ),
-                const Icon(
+                Icon(
                   FluentIcons.more,
                   size: 12,
                   color: AppColors.textSecondary,
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Expanded(child: _DocumentPreview(accent: template.accent)),
           ],
         ),
@@ -284,12 +284,12 @@ class _TemplateCard extends StatelessWidget {
 class _DocumentPreview extends StatelessWidget {
   final Color accent;
 
-  const _DocumentPreview({required this.accent});
+  _DocumentPreview({required this.accent});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),
@@ -306,7 +306,7 @@ class _DocumentPreview extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Container(
                   width: 48,
                   height: 4,
@@ -315,24 +315,24 @@ class _DocumentPreview extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
-                const Spacer(),
-                const _TinyDot(),
-                const SizedBox(width: 4),
-                const _TinyDot(),
-                const SizedBox(width: 8),
+                Spacer(),
+                _TinyDot(),
+                SizedBox(width: 4),
+                _TinyDot(),
+                SizedBox(width: 8),
               ],
             ),
           ),
-          const SizedBox(height: 10),
-          const _PreviewLine(width: 0.74),
-          const _PreviewLine(width: 0.92),
-          const _PreviewLine(width: 0.56),
-          const SizedBox(height: 8),
-          const _PreviewLine(width: 0.84),
-          const _PreviewLine(width: 0.64),
-          const Spacer(),
+          SizedBox(height: 10),
+          _PreviewLine(width: 0.74),
+          _PreviewLine(width: 0.92),
+          _PreviewLine(width: 0.56),
+          SizedBox(height: 8),
+          _PreviewLine(width: 0.84),
+          _PreviewLine(width: 0.64),
+          Spacer(),
           Row(
-            children: const [
+            children: [
               _PreviewCheck(),
               SizedBox(width: 6),
               Expanded(child: _PreviewLine(width: 0.95)),
@@ -347,7 +347,7 @@ class _DocumentPreview extends StatelessWidget {
 class _PreviewLine extends StatelessWidget {
   final double width;
 
-  const _PreviewLine({required this.width});
+  _PreviewLine({required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -355,9 +355,9 @@ class _PreviewLine extends StatelessWidget {
       widthFactor: width,
       child: Container(
         height: 4,
-        margin: const EdgeInsets.only(bottom: 6),
+        margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
-          color: const Color(0xFFE9E3F5),
+          color: Color(0xFFE9E3F5),
           borderRadius: BorderRadius.circular(999),
         ),
       ),
@@ -366,7 +366,7 @@ class _PreviewLine extends StatelessWidget {
 }
 
 class _PreviewCheck extends StatelessWidget {
-  const _PreviewCheck();
+  _PreviewCheck();
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +374,7 @@ class _PreviewCheck extends StatelessWidget {
       width: 8,
       height: 8,
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFCFC6DD)),
+        border: Border.all(color: Color(0xFFCFC6DD)),
         borderRadius: BorderRadius.circular(2),
       ),
     );
@@ -382,14 +382,14 @@ class _PreviewCheck extends StatelessWidget {
 }
 
 class _TinyDot extends StatelessWidget {
-  const _TinyDot();
+  _TinyDot();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 3,
       height: 3,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Color(0xFFCFC6DD),
         shape: BoxShape.circle,
       ),

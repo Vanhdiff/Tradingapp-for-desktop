@@ -9,7 +9,7 @@ class ChartFilterBar extends StatelessWidget {
   final ValueChanged<ChartRange> onRangeChanged;
   final ValueChanged<ChartMetricMode> onModeChanged;
 
-  const ChartFilterBar({
+  ChartFilterBar({
     super.key,
     required this.selectedRange,
     required this.selectedMode,
@@ -26,49 +26,49 @@ class ChartFilterBar extends StatelessWidget {
           selected: selectedRange == ChartRange.d7,
           onTap: () => onRangeChanged(ChartRange.d7),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _RangeChip(
           label: '30D',
           selected: selectedRange == ChartRange.d30,
           onTap: () => onRangeChanged(ChartRange.d30),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _RangeChip(
           label: '90D',
           selected: selectedRange == ChartRange.d90,
           onTap: () => onRangeChanged(ChartRange.d90),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _RangeChip(
           label: '180D',
           selected: selectedRange == ChartRange.d180,
           onTap: () => onRangeChanged(ChartRange.d180),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _RangeChip(
           label: '1Y',
           selected: selectedRange == ChartRange.y1,
           onTap: () => onRangeChanged(ChartRange.y1),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _RangeChip(
           label: 'All',
           selected: selectedRange == ChartRange.all,
           onTap: () => onRangeChanged(ChartRange.all),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         _MiniChip(
           label: r'$',
           selected: selectedMode == ChartMetricMode.currency,
           onTap: () => onModeChanged(ChartMetricMode.currency),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _MiniChip(
           label: 'R',
           selected: selectedMode == ChartMetricMode.rMultiple,
           onTap: () => onModeChanged(ChartMetricMode.rMultiple),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _MiniChip(
           label: '%',
           selected: selectedMode == ChartMetricMode.percent,
@@ -84,7 +84,7 @@ class _RangeChip extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _RangeChip({
+  _RangeChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -95,12 +95,12 @@ class _RangeChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
         decoration: BoxDecoration(
           color: selected ? AppColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? AppColors.primary : const Color(0xFFE8E3F3),
+            color: selected ? AppColors.primary : Color(0xFFE8E3F3),
           ),
         ),
         child: Text(
@@ -121,7 +121,7 @@ class _MiniChip extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _MiniChip({
+  _MiniChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -139,7 +139,7 @@ class _MiniChip extends StatelessWidget {
           color: selected ? AppColors.primarySoft : Colors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? AppColors.primary : const Color(0xFFE8E3F3),
+            color: selected ? AppColors.primary : Color(0xFFE8E3F3),
           ),
         ),
         child: Text(

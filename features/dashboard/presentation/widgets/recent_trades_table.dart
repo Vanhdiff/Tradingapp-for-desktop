@@ -2,22 +2,22 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class RecentTradesTable extends StatelessWidget {
-  const RecentTradesTable({super.key});
+  RecentTradesTable({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 310,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x12000000),
+            color: Color(0x12000000),
             blurRadius: 28,
-            offset: const Offset(0, 12),
+            offset: Offset(0, 12),
           ),
         ],
       ),
@@ -25,7 +25,7 @@ class RecentTradesTable extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Text(
                 'Recent Trades',
                 style: TextStyle(
@@ -45,14 +45,14 @@ class RecentTradesTable extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFFF7F4FF),
+              color: Color(0xFFF7F4FF),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Row(
+            child: Row(
               children: [
                 Expanded(flex: 2, child: _Header('Instrument')),
                 Expanded(child: _Header('Direction')),
@@ -62,30 +62,30 @@ class RecentTradesTable extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          const _TradeRow(
+          SizedBox(height: 8),
+          _TradeRow(
             'EURUSD',
             'Sell',
             r'-$1,500.00',
             'Loss',
             'Today, 11:15 AM',
           ),
-          const _TradeRow(
+          _TradeRow(
             'GBPJPY',
             'Sell',
             r'-$1,250.00',
             'Loss',
             'Today, 10:48 AM',
           ),
-          const _TradeRow(
+          _TradeRow(
             'XAUUSD',
             'Sell',
             r'-$600.00',
             'Loss',
             'Today, 10:05 AM',
           ),
-          const _TradeRow('AUDUSD', 'Buy', r'+$64.60', 'Win', 'Today, 9:42 AM'),
-          const _TradeRow('USDCAD', 'Sell', r'$0.00', 'BE', 'Today, 9:12 AM'),
+          _TradeRow('AUDUSD', 'Buy', r'+$64.60', 'Win', 'Today, 9:42 AM'),
+          _TradeRow('USDCAD', 'Sell', r'$0.00', 'BE', 'Today, 9:12 AM'),
         ],
       ),
     );
@@ -94,13 +94,13 @@ class RecentTradesTable extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final String text;
-  const _Header(this.text);
+  _Header(this.text);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 9,
         color: AppColors.textSecondary,
         fontWeight: FontWeight.w600,
@@ -116,7 +116,7 @@ class _TradeRow extends StatelessWidget {
   final String outcome;
   final String closedAt;
 
-  const _TradeRow(
+  _TradeRow(
     this.instrument,
     this.direction,
     this.pnl,
@@ -131,16 +131,16 @@ class _TradeRow extends StatelessWidget {
     final isWin = outcome == 'Win';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           Expanded(
             flex: 2,
             child: Row(
               children: [
-                const _PairDot(),
-                const SizedBox(width: 8),
-                Text(instrument, style: const TextStyle(fontSize: 11)),
+                _PairDot(),
+                SizedBox(width: 8),
+                Text(instrument, style: TextStyle(fontSize: 11)),
               ],
             ),
           ),
@@ -172,13 +172,13 @@ class _TradeRow extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: isWin
-                      ? const Color(0xFFEAF8F1)
+                      ? Color(0xFFEAF8F1)
                       : isLoss
-                      ? const Color(0xFFFFEEEE)
-                      : const Color(0xFFF1F1F4),
+                      ? Color(0xFFFFEEEE)
+                      : Color(0xFFF1F1F4),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -200,7 +200,7 @@ class _TradeRow extends StatelessWidget {
             flex: 2,
             child: Text(
               closedAt,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10,
                 color: AppColors.textSecondary,
               ),
@@ -213,7 +213,7 @@ class _TradeRow extends StatelessWidget {
 }
 
 class _PairDot extends StatelessWidget {
-  const _PairDot();
+  _PairDot();
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +228,7 @@ class _PairDot extends StatelessWidget {
               width: 13,
               height: 13,
               decoration: BoxDecoration(
-                color: const Color(0xFF2979FF),
+                color: Color(0xFF2979FF),
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 1),
               ),
@@ -240,7 +240,7 @@ class _PairDot extends StatelessWidget {
               width: 13,
               height: 13,
               decoration: BoxDecoration(
-                color: const Color(0xFFE53935),
+                color: Color(0xFFE53935),
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 1),
               ),

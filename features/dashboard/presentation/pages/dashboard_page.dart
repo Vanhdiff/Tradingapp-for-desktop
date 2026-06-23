@@ -7,20 +7,20 @@ import '../widgets/recent_trades_table.dart';
 import '../widgets/rule_break_panel.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
+  DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        const horizontalPadding = 22.0;
+        horizontalPadding = 22.0;
         final contentWidth = constraints.maxWidth - horizontalPadding * 2;
         final targetWidth = contentWidth * 0.9;
         final pageWidth = targetWidth < 1120 ? 1120.0 : targetWidth;
         final scrollWidth = pageWidth > contentWidth ? pageWidth : contentWidth;
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
             horizontalPadding,
             12,
             horizontalPadding,
@@ -34,7 +34,7 @@ class DashboardPage extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: SizedBox(
                   width: pageWidth,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _DashboardHeader(),
@@ -73,13 +73,13 @@ class DashboardPage extends StatelessWidget {
 }
 
 class _DashboardHeader extends StatelessWidget {
-  const _DashboardHeader();
+  _DashboardHeader();
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: const [
+      children: [
         Text(
           'Dashboard',
           style: TextStyle(
@@ -106,12 +106,12 @@ class _DashboardHeader extends StatelessWidget {
 }
 
 class _TimeRangeFilter extends StatelessWidget {
-  const _TimeRangeFilter();
+  _TimeRangeFilter();
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children: [
         _RangeButton('Day'),
         SizedBox(width: 6),
         _RangeButton('Week'),
@@ -128,17 +128,17 @@ class _RangeButton extends StatelessWidget {
   final String label;
   final bool selected;
 
-  const _RangeButton(this.label, {this.selected = false});
+  _RangeButton(this.label, {this.selected = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: selected ? AppColors.primary : Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selected ? AppColors.primary : const Color(0xFFE8E3F3),
+          color: selected ? AppColors.primary : Color(0xFFE8E3F3),
         ),
       ),
       child: Text(
@@ -154,21 +154,21 @@ class _RangeButton extends StatelessWidget {
 }
 
 class _RiskCoachBanner extends StatelessWidget {
-  const _RiskCoachBanner();
+  _RiskCoachBanner();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 38,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF2F5),
+        color: Color(0xFFFFF2F5),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFF2E2E8)),
+        border: Border.all(color: Color(0xFFF2E2E8)),
       ),
       child: Row(
-        children: const [
+        children: [
           Icon(FluentIcons.error_badge, size: 15, color: AppColors.danger),
           SizedBox(width: 8),
           Expanded(

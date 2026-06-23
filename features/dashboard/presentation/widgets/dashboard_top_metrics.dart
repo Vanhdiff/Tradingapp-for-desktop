@@ -2,12 +2,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class DashboardTopMetrics extends StatelessWidget {
-  const DashboardTopMetrics({super.key});
+  DashboardTopMetrics({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children: [
         Expanded(
           child: _SummaryMetricCard(
             title: 'ACCOUNT BALANCE',
@@ -45,7 +45,7 @@ class _SummaryMetricCard extends StatelessWidget {
   final Color? valueColor;
   final Widget? trailing;
 
-  const _SummaryMetricCard({
+  _SummaryMetricCard({
     required this.title,
     required this.value,
     this.valueColor,
@@ -56,16 +56,16 @@ class _SummaryMetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 78,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x11000000),
+            color: Color(0x11000000),
             blurRadius: 22,
-            offset: const Offset(0, 10),
+            offset: Offset(0, 10),
           ),
         ],
       ),
@@ -74,13 +74,13 @@ class _SummaryMetricCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Row(
             children: [
               Text(
@@ -91,7 +91,7 @@ class _SummaryMetricCard extends StatelessWidget {
                   color: valueColor ?? AppColors.textPrimary,
                 ),
               ),
-              if (trailing != null) ...[const SizedBox(width: 4), trailing!],
+              if (trailing != null) ...[SizedBox(width: 4), trailing!],
             ],
           ),
         ],
@@ -101,29 +101,29 @@ class _SummaryMetricCard extends StatelessWidget {
 }
 
 class _AvgRMetricCard extends StatelessWidget {
-  const _AvgRMetricCard();
+  _AvgRMetricCard();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 78,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x11000000),
+            color: Color(0x11000000),
             blurRadius: 22,
-            offset: const Offset(0, 10),
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'AVG R PER TRADE',
             style: TextStyle(
               fontSize: 10,
@@ -131,10 +131,10 @@ class _AvgRMetricCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Row(
             children: [
-              const Text(
+              Text(
                 '+0.42R',
                 style: TextStyle(
                   fontSize: 16,
@@ -142,8 +142,8 @@ class _AvgRMetricCard extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 12),
-              const Text(
+              SizedBox(width: 12),
+              Text(
                 '+2.33R',
                 style: TextStyle(
                   fontSize: 10,
@@ -151,8 +151,8 @@ class _AvgRMetricCard extends StatelessWidget {
                   color: AppColors.success,
                 ),
               ),
-              const SizedBox(width: 8),
-              const Text(
+              SizedBox(width: 8),
+              Text(
                 '-1.00R',
                 style: TextStyle(
                   fontSize: 10,
@@ -162,7 +162,7 @@ class _AvgRMetricCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Row(
             children: [
               Expanded(
@@ -174,7 +174,7 @@ class _AvgRMetricCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Expanded(
                 child: Container(
                   height: 4,
@@ -193,28 +193,28 @@ class _AvgRMetricCard extends StatelessWidget {
 }
 
 class _ProfitFactorCard extends StatelessWidget {
-  const _ProfitFactorCard();
+  _ProfitFactorCard();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 78,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x11000000),
+            color: Color(0x11000000),
             blurRadius: 22,
-            offset: const Offset(0, 10),
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -244,8 +244,8 @@ class _ProfitFactorCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
-          const _MiniGauge(),
+          SizedBox(width: 10),
+          _MiniGauge(),
         ],
       ),
     );
@@ -253,7 +253,7 @@ class _ProfitFactorCard extends StatelessWidget {
 }
 
 class _MiniGauge extends StatelessWidget {
-  const _MiniGauge();
+  _MiniGauge();
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +268,12 @@ class _MiniGauge extends StatelessWidget {
 class _MiniGaugePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    const stroke = 4.0;
+    stroke = 4.0;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - stroke) / 2;
 
     final basePaint = Paint()
-      ..color = const Color(0xFFF2EEF8)
+      ..color = Color(0xFFF2EEF8)
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke;
 

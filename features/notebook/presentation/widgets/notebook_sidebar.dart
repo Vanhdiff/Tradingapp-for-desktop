@@ -8,7 +8,7 @@ class NotebookSidebar extends StatefulWidget {
   final List<NotebookNote> recentNotes;
   final List<NotebookFolder> folders;
 
-  const NotebookSidebar({
+  NotebookSidebar({
     super.key,
     required this.pinnedNotes,
     required this.recentNotes,
@@ -29,8 +29,8 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
   Widget build(BuildContext context) {
     return Container(
       width: 312,
-      constraints: const BoxConstraints(minHeight: 820),
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+      constraints: BoxConstraints(minHeight: 820),
+      padding: EdgeInsets.fromLTRB(18, 18, 18, 20),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(10),
@@ -39,15 +39,15 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
           BoxShadow(
             color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 18,
-            offset: const Offset(0, 10),
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SearchBox(),
-          const SizedBox(height: 20),
+          _SearchBox(),
+          SizedBox(height: 20),
           _SectionHeader(
             'PINNED NOTES',
             count: widget.pinnedNotes.length,
@@ -55,30 +55,30 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
             onToggle: () => setState(() => _showPinned = !_showPinned),
           ),
           if (_showPinned) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ...widget.pinnedNotes.map((note) => _NoteTile(note)),
           ],
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           _SectionHeader(
             'RECENT NOTES',
             expanded: _showRecent,
             onToggle: () => setState(() => _showRecent = !_showRecent),
           ),
           if (_showRecent) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ...widget.recentNotes.take(2).map((note) => _NoteTile(note)),
           ],
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           _SectionHeader(
             'FOLDERS',
             expanded: _showFolders,
             onToggle: () => setState(() => _showFolders = !_showFolders),
           ),
           if (_showFolders) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ...widget.folders.map((folder) => _FolderTile(folder)),
           ],
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           _SectionHeader(
             'ALL NOTES',
             count: 32,
@@ -86,7 +86,7 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
             onToggle: () => setState(() => _showAllNotes = !_showAllNotes),
           ),
           if (_showAllNotes) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ...widget.recentNotes.map((note) => _NoteTile(note, compact: true)),
           ],
         ],
@@ -96,7 +96,7 @@ class _NotebookSidebarState extends State<NotebookSidebar> {
 }
 
 class _SearchBox extends StatelessWidget {
-  const _SearchBox();
+  _SearchBox();
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +105,13 @@ class _SearchBox extends StatelessWidget {
         Expanded(
           child: Container(
             height: 42,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               color: AppColors.shellBg,
               borderRadius: BorderRadius.circular(9),
               border: Border.all(color: AppColors.border),
             ),
-            child: const Row(
+            child: Row(
               children: [
                 Icon(
                   FluentIcons.search,
@@ -131,7 +131,7 @@ class _SearchBox extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Container(
           width: 40,
           height: 42,
@@ -141,7 +141,7 @@ class _SearchBox extends StatelessWidget {
             borderRadius: BorderRadius.circular(9),
             border: Border.all(color: AppColors.border),
           ),
-          child: const Icon(
+          child: Icon(
             FluentIcons.collapse_content,
             size: 15,
             color: AppColors.primary,
@@ -158,7 +158,7 @@ class _SectionHeader extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
 
-  const _SectionHeader(
+  _SectionHeader(
     this.title, {
     this.count,
     required this.expanded,
@@ -174,19 +174,19 @@ class _SectionHeader extends StatelessWidget {
         children: [
           Text(
             count == null ? title : '$title  $count',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               color: Color(0xFF6E6779),
               fontWeight: FontWeight.w800,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Icon(
             expanded
                 ? FluentIcons.chevron_down_small
                 : FluentIcons.chevron_right_small,
             size: 14,
-            color: const Color(0xFF8E879B),
+            color: Color(0xFF8E879B),
           ),
         ],
       ),
@@ -198,7 +198,7 @@ class _NoteTile extends StatelessWidget {
   final NotebookNote note;
   final bool compact;
 
-  const _NoteTile(this.note, {this.compact = false});
+  _NoteTile(this.note, {this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -208,10 +208,10 @@ class _NoteTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 2),
+            padding: EdgeInsets.only(top: 2),
             child: Icon(note.icon, size: 16, color: note.color),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,28 +220,28 @@ class _NoteTile extends StatelessWidget {
                   note.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   note.preview,
                   maxLines: compact ? 1 : 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     color: Color(0xFF7A7485),
                     fontWeight: FontWeight.w500,
                     height: 1.32,
                   ),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3),
                 Text(
                   note.date,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     color: Color(0xFFB6AEC5),
                     fontWeight: FontWeight.w600,
@@ -259,20 +259,20 @@ class _NoteTile extends StatelessWidget {
 class _FolderTile extends StatelessWidget {
   final NotebookFolder folder;
 
-  const _FolderTile(this.folder);
+  _FolderTile(this.folder);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 11),
+      padding: EdgeInsets.only(bottom: 11),
       child: Row(
         children: [
-          const Icon(FluentIcons.folder, size: 16, color: AppColors.success),
-          const SizedBox(width: 10),
+          Icon(FluentIcons.folder, size: 16, color: AppColors.success),
+          SizedBox(width: 10),
           Expanded(
             child: Text(
               folder.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w800,
@@ -281,7 +281,7 @@ class _FolderTile extends StatelessWidget {
           ),
           Text(
             '${folder.count}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w700,

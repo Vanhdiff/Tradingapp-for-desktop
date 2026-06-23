@@ -1,11 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../../app/theme/app_colors.dart';
 import '../app_nav_item.dart';
 import '../app_nav_items.dart';
+import '../shell_theme.dart';
 
 class ShellSidebar extends StatelessWidget {
   final String currentRoute;
   final bool isCollapsed;
+  final AppThemePalette theme;
   final ValueChanged<String> onNavigate;
   final VoidCallback onPointerEnter;
   final VoidCallback onPointerExit;
@@ -16,6 +17,7 @@ class ShellSidebar extends StatelessWidget {
     super.key,
     required this.currentRoute,
     required this.isCollapsed,
+    required this.theme,
     required this.onNavigate,
     required this.onPointerEnter,
     required this.onPointerExit,
@@ -34,11 +36,12 @@ class ShellSidebar extends StatelessWidget {
         width: isCollapsed ? 28 : 48,
         margin: const EdgeInsets.fromLTRB(8, 8, 6, 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.sidebar,
           borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: theme.border),
         ),
         child: isCollapsed
-            ? _CollapsedSidebar(onTap: onToggleCollapsed)
+            ? _CollapsedSidebar(theme: theme, onTap: onToggleCollapsed)
             : Column(
                 children: [
                   const SizedBox(height: 10),
@@ -48,7 +51,7 @@ class ShellSidebar extends StatelessWidget {
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: theme.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -70,6 +73,7 @@ class ShellSidebar extends StatelessWidget {
                             (item) => _SidebarIconButton(
                               item: item,
                               selected: currentRoute == item.route,
+                              theme: theme,
                               onTap: () => onNavigate(item.route),
                             ),
                           ),
@@ -78,6 +82,7 @@ class ShellSidebar extends StatelessWidget {
                             (item) => _SidebarIconButton(
                               item: item,
                               selected: false,
+                              theme: theme,
                               onTap: switch (item.key) {
                                 'collapse' => onToggleCollapsed,
                                 'theme' => onThemePressed,
@@ -120,9 +125,10 @@ class ShellSidebar extends StatelessWidget {
 }
 
 class _CollapsedSidebar extends StatelessWidget {
+  final AppThemePalette theme;
   final VoidCallback onTap;
 
-  const _CollapsedSidebar({required this.onTap});
+  const _CollapsedSidebar({required this.theme, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -138,13 +144,14 @@ class _CollapsedSidebar extends StatelessWidget {
               height: 34,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: AppColors.primarySoft,
+                color: theme.hover,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: theme.border),
               ),
-              child: const Icon(
+              child: Icon(
                 FluentIcons.double_chevron_right,
                 size: 14,
-                color: AppColors.primary,
+                color: theme.primary,
               ),
             ),
           ),
@@ -158,11 +165,13 @@ class _CollapsedSidebar extends StatelessWidget {
 class _SidebarIconButton extends StatelessWidget {
   final AppNavItem item;
   final bool selected;
+  final AppThemePalette theme;
   final VoidCallback onTap;
 
   const _SidebarIconButton({
     required this.item,
     required this.selected,
+    required this.theme,
     required this.onTap,
   });
 
@@ -178,13 +187,13 @@ class _SidebarIconButton extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: selected ? AppColors.primarySoft : Colors.transparent,
+              color: selected ? theme.hover : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               item.icon,
               size: 18,
-              color: selected ? AppColors.primary : const Color(0xFF5F5F68),
+              color: selected ? theme.primary : theme.textSecondary,
             ),
           ),
         ),

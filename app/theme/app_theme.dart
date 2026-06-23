@@ -5,7 +5,7 @@ FluentThemeData buildAppTheme() {
   return FluentThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.bg,
-    accentColor: AccentColor.swatch(const {
+    accentColor: AccentColor.swatch({
       'darkest': AppColors.primary,
       'darker': AppColors.primary,
       'dark': AppColors.primary,

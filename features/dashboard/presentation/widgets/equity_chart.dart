@@ -5,7 +5,7 @@ import '../../domain/entities/dashboard_query.dart';
 import 'chart_filter_bar.dart';
 
 class EquityChart extends StatefulWidget {
-  const EquityChart({super.key});
+  EquityChart({super.key});
 
   @override
   State<EquityChart> createState() => _EquityChartState();
@@ -18,16 +18,16 @@ class _EquityChartState extends State<EquityChart> {
   Widget build(BuildContext context) {
     return Container(
       height: 310,
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
+      padding: EdgeInsets.fromLTRB(18, 18, 18, 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x12000000),
+            color: Color(0x12000000),
             blurRadius: 28,
-            offset: const Offset(0, 12),
+            offset: Offset(0, 12),
           ),
         ],
       ),
@@ -36,7 +36,7 @@ class _EquityChartState extends State<EquityChart> {
         children: [
           Row(
             children: [
-              const Text(
+              Text(
                 'Account Balance',
                 style: TextStyle(
                   fontSize: 15,
@@ -44,7 +44,7 @@ class _EquityChartState extends State<EquityChart> {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               ChartFilterBar(
                 selectedRange: query.range,
                 selectedMode: query.mode,
@@ -61,7 +61,7 @@ class _EquityChartState extends State<EquityChart> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Expanded(
             child: CustomPaint(
               painter: _CompactChartPainter(mode: query.mode),
@@ -87,14 +87,14 @@ class _CompactChartPainter extends CustomPainter {
     final chartHeight = size.height - bottomPad;
 
     final gridPaint = Paint()
-      ..color = const Color(0xFFF0ECF6)
+      ..color = Color(0xFFF0ECF6)
       ..strokeWidth = 1;
 
     final axisPaint = Paint()
-      ..color = const Color(0xFFE6E0F0)
+      ..color = Color(0xFFE6E0F0)
       ..strokeWidth = 1;
 
-    const textStyle = TextStyle(
+    textStyle = TextStyle(
       color: Color(0xFFB0A8BE),
       fontSize: 8,
       fontWeight: FontWeight.w500,
@@ -177,7 +177,7 @@ class _CompactChartPainter extends CustomPainter {
       ..close();
 
     final fillPaint = Paint()
-      ..shader = const LinearGradient(
+      ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [Color(0x3333C981), Color(0x11F5A14B), Color(0x00FFFFFF)],
@@ -186,7 +186,7 @@ class _CompactChartPainter extends CustomPainter {
     canvas.drawPath(fillPath, fillPaint);
 
     final linePaint = Paint()
-      ..shader = const LinearGradient(
+      ..shader = LinearGradient(
         colors: [Color(0xFFFF8D3D), Color(0xFF2FC97C)],
       ).createShader(Rect.fromLTWH(leftPad, 0, chartWidth, chartHeight))
       ..style = PaintingStyle.stroke

@@ -8,10 +8,10 @@ class AppPanel extends StatelessWidget {
   final double? height;
   final double? width;
 
-  const AppPanel({
+  AppPanel({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = EdgeInsets.all(16),
     this.height,
     this.width,
   });

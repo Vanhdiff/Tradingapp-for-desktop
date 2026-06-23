@@ -6,7 +6,7 @@ import '../controllers/dashboard_state.dart';
 class DashboardMetricsRow extends StatelessWidget {
   final DashboardState state;
 
-  const DashboardMetricsRow({
+  DashboardMetricsRow({
     super.key,
     required this.state,
   });
@@ -23,7 +23,7 @@ class DashboardMetricsRow extends StatelessWidget {
             value: '\$${summary.accountBalance.toStringAsFixed(2)}',
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: MetricCard(
             title: 'Closed PnL',
@@ -31,14 +31,14 @@ class DashboardMetricsRow extends StatelessWidget {
             valueColor: AppColors.danger,
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: MetricCard(
             title: 'Win Rate',
             value: '${summary.winRate.toStringAsFixed(2)}%',
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: MetricCard(
             title: 'Profit Factor',

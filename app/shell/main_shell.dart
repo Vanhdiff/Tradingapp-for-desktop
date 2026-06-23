@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import '../router/route_names.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_theme_palette.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/journal/presentation/pages/journal_page.dart';
 import '../../features/plan/presentation/pages/plan_page.dart';
@@ -11,29 +13,8 @@ import 'widgets/shell_sidebar.dart';
 import 'widgets/shell_topbar.dart';
 import 'widgets/theme_picker_bar.dart';
 
-const _themePresets = [
-  ShellThemePreset(
-    name: 'Trắng',
-    description: 'Light mode',
-    bg: Color(0xFFF3E8FF),
-    shellBg: Color(0xFFF7F3FF),
-    surface: Color(0xFFFFFFFF),
-    primary: Color(0xFF8B6CFF),
-    accent: Color(0xFF1FA971),
-  ),
-  ShellThemePreset(
-    name: 'Đen',
-    description: 'Dark mode',
-    bg: Color(0xFF10131A),
-    shellBg: Color(0xFF171B24),
-    surface: Color(0xFF202635),
-    primary: Color(0xFF9B7BFF),
-    accent: Color(0xFF26D39A),
-  ),
-];
-
 class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+  MainShell({super.key});
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -43,7 +24,7 @@ class _MainShellState extends State<MainShell> {
   String currentRoute = RouteNames.dashboard;
   bool sidebarCollapsed = false;
   bool _showThemePicker = false;
-  ShellThemePreset _selectedTheme = _themePresets.first;
+  AppThemePalette _selectedTheme = AppThemePalettes.light;
   bool _isSidebarPointerInside = false;
   Timer? _sidebarAutoCollapseTimer;
 
@@ -69,7 +50,7 @@ class _MainShellState extends State<MainShell> {
     _sidebarAutoCollapseTimer?.cancel();
     if (sidebarCollapsed) return;
 
-    _sidebarAutoCollapseTimer = Timer(const Duration(seconds: 5), () {
+    _sidebarAutoCollapseTimer = Timer(Duration(seconds: 5), () {
       if (!mounted || _isSidebarPointerInside || sidebarCollapsed) return;
       setState(() => sidebarCollapsed = true);
     });
@@ -122,17 +103,17 @@ class _MainShellState extends State<MainShell> {
   Widget get currentPage {
     switch (currentRoute) {
       case RouteNames.dashboard:
-        return const DashboardPage();
+        return DashboardPage();
       case RouteNames.journal:
-        return const JournalPage();
+        return JournalPage();
       case RouteNames.plan:
-        return const PlanPage();
+        return PlanPage();
       case RouteNames.notebook:
-        return const NotebookPage();
+        return NotebookPage();
       case RouteNames.news:
-        return const NewsPage();
+        return NewsPage();
       default:
-        return const DashboardPage();
+        return DashboardPage();
     }
   }
 
@@ -148,6 +129,7 @@ class _MainShellState extends State<MainShell> {
                 ShellSidebar(
                   currentRoute: currentRoute,
                   isCollapsed: sidebarCollapsed,
+                  theme: _selectedTheme,
                   onNavigate: navigateTo,
                   onPointerEnter: _handleSidebarEnter,
                   onPointerExit: _handleSidebarExit,
@@ -156,14 +138,14 @@ class _MainShellState extends State<MainShell> {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(0, 14, 14, 14),
+                    margin: EdgeInsets.fromLTRB(0, 14, 14, 14),
                     decoration: BoxDecoration(
                       color: _selectedTheme.shellBg,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Column(
                       children: [
-                        ShellTopbar(title: pageTitle),
+                        ShellTopbar(title: pageTitle, theme: _selectedTheme),
                         Expanded(child: currentPage),
                       ],
                     ),
@@ -178,10 +160,13 @@ class _MainShellState extends State<MainShell> {
               left: sidebarCollapsed ? 46 : 66,
               width: 236,
               child: ThemePickerBar(
-                presets: _themePresets,
+                presets: AppThemePalettes.all,
                 selected: _selectedTheme,
                 onSelected: (theme) {
-                  setState(() => _selectedTheme = theme);
+                  setState(() {
+                    _selectedTheme = theme;
+                    AppColors.use(theme);
+                  });
                 },
                 onClose: () {
                   setState(() => _showThemePicker = false);

@@ -1,31 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../../theme/app_colors.dart';
-
-class ShellThemePreset {
-  final String name;
-  final String description;
-  final Color bg;
-  final Color shellBg;
-  final Color surface;
-  final Color primary;
-  final Color accent;
-
-  const ShellThemePreset({
-    required this.name,
-    required this.description,
-    required this.bg,
-    required this.shellBg,
-    required this.surface,
-    required this.primary,
-    required this.accent,
-  });
-}
+import '../shell_theme.dart';
 
 class ThemePickerBar extends StatelessWidget {
-  final List<ShellThemePreset> presets;
-  final ShellThemePreset selected;
-  final ValueChanged<ShellThemePreset> onSelected;
+  final List<AppThemePalette> presets;
+  final AppThemePalette selected;
+  final ValueChanged<AppThemePalette> onSelected;
   final VoidCallback onClose;
 
   const ThemePickerBar({
@@ -41,12 +21,12 @@ class ThemePickerBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.97),
+        color: selected.surface.withValues(alpha: 0.98),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: selected.border),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.14),
+            color: selected.primary.withValues(alpha: 0.16),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
@@ -57,11 +37,11 @@ class ThemePickerBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Theme',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: selected.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
@@ -74,14 +54,14 @@ class ThemePickerBar extends StatelessWidget {
                   height: 28,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: AppColors.shellBg,
+                    color: selected.hover,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: selected.border),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     FluentIcons.cancel,
                     size: 11,
-                    color: AppColors.textSecondary,
+                    color: selected.textSecondary,
                   ),
                 ),
               ),
@@ -94,6 +74,8 @@ class ThemePickerBar extends StatelessWidget {
               child: _ThemePresetChip(
                 preset: preset,
                 selected: preset.name == selected.name,
+                textPrimary: selected.textPrimary,
+                textSecondary: selected.textSecondary,
                 onTap: () => onSelected(preset),
               ),
             ),
@@ -105,13 +87,17 @@ class ThemePickerBar extends StatelessWidget {
 }
 
 class _ThemePresetChip extends StatelessWidget {
-  final ShellThemePreset preset;
+  final AppThemePalette preset;
   final bool selected;
+  final Color textPrimary;
+  final Color textSecondary;
   final VoidCallback onTap;
 
   const _ThemePresetChip({
     required this.preset,
     required this.selected,
+    required this.textPrimary,
+    required this.textSecondary,
     required this.onTap,
   });
 
@@ -125,12 +111,10 @@ class _ThemePresetChip extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
-          color: selected
-              ? preset.primary.withValues(alpha: 0.09)
-              : Colors.white,
+          color: selected ? preset.hover : preset.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? preset.primary : const Color(0xFFE8E3F3),
+            color: selected ? preset.primary : preset.border,
             width: selected ? 1.3 : 1,
           ),
         ),
@@ -150,8 +134,8 @@ class _ThemePresetChip extends StatelessWidget {
                           preset.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
+                          style: TextStyle(
+                            color: textPrimary,
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
                           ),
@@ -174,9 +158,7 @@ class _ThemePresetChip extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: selected
-                          ? preset.primary
-                          : AppColors.textSecondary,
+                      color: selected ? preset.primary : textSecondary,
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                     ),
@@ -192,7 +174,7 @@ class _ThemePresetChip extends StatelessWidget {
 }
 
 class _ThemeSwatches extends StatelessWidget {
-  final ShellThemePreset preset;
+  final AppThemePalette preset;
 
   const _ThemeSwatches({required this.preset});
 

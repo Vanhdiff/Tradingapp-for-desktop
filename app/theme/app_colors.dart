@@ -1,18 +1,34 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import 'app_theme_palette.dart';
+
 abstract class AppColors {
-  static const Color bg = Color(0xFFF3E8FF);
-  static const Color shellBg = Color(0xFFF7F3FF);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color border = Color(0xFFEEE8F8);
+  static AppThemePalette _palette = AppThemePalettes.light;
 
-  static const Color primary = Color(0xFF8B6CFF);
-  static const Color primarySoft = Color(0xFFF1EAFF);
+  static AppThemePalette get palette => _palette;
 
-  static const Color textPrimary = Color(0xFF1C1C1E);
-  static const Color textSecondary = Color(0xFF7E7E87);
+  static bool get isDark => _palette.mode == AppThemeMode.dark;
 
-  static const Color success = Color(0xFF1FA971);
-  static const Color danger = Color(0xFFE25555);
-  static const Color warning = Color(0xFFF5A623);
+  static void use(AppThemePalette palette) {
+    _palette = palette;
+  }
+
+  static Color get bg => _palette.bg;
+  static Color get shellBg => _palette.shellBg;
+  static Color get sidebar => _palette.sidebar;
+  static Color get surface => _palette.surface;
+  static Color get surfaceAlt => _palette.surfaceAlt;
+  static Color get border => _palette.border;
+
+  static Color get primary => _palette.primary;
+  static Color get primarySoft => _palette.primarySoft;
+  static Color get accent => _palette.accent;
+
+  static Color get textPrimary => _palette.textPrimary;
+  static Color get textSecondary => _palette.textSecondary;
+  static Color get hover => _palette.hover;
+
+  static Color get success => _palette.success;
+  static Color get danger => _palette.danger;
+  static Color get warning => _palette.warning;
 }

@@ -1,46 +1,43 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../../app/theme/app_colors.dart';
+import '../shell_theme.dart';
 
 class ShellTopbar extends StatelessWidget {
   final String title;
+  final AppThemePalette theme;
 
-  const ShellTopbar({
-    super.key,
-    required this.title,
-  });
+  const ShellTopbar({super.key, required this.title, required this.theme});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(color: AppColors.border),
-        ),
+      decoration: BoxDecoration(
+        color: theme.surface,
+        border: Border(bottom: BorderSide(color: theme.border)),
       ),
       child: Row(
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+              color: theme.textPrimary,
             ),
           ),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.primarySoft,
+              color: theme.hover,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: theme.border),
             ),
-            child: const Text(
+            child: Text(
               'Desktop App',
               style: TextStyle(
-                color: AppColors.primary,
+                color: theme.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),

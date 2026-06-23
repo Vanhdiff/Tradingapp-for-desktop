@@ -20,7 +20,7 @@ class JournalReviewPanel extends StatelessWidget {
   final ValueChanged<String> onEntryEmotionChanged;
   final ValueChanged<String> onExitEmotionChanged;
 
-  const JournalReviewPanel({
+  JournalReviewPanel({
     super.key,
     required this.reflectionController,
     required this.followedPlan,
@@ -41,20 +41,20 @@ class JournalReviewPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppPanel(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Review & Reflection',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: _PlanCheckbox(this)),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: JournalComboField(
                   label: 'Which plan did you intend to follow?',
@@ -65,7 +65,7 @@ class JournalReviewPanel extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -77,16 +77,16 @@ class JournalReviewPanel extends StatelessWidget {
                   onChanged: onEntryConfluenceChanged,
                 ),
               ),
-              const SizedBox(width: 16),
-              const Expanded(child: _TradeManagementField()),
+              SizedBox(width: 16),
+              Expanded(child: _TradeManagementField()),
             ],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(child: _MistakesField()),
-              const SizedBox(width: 16),
+              Expanded(child: _MistakesField()),
+              SizedBox(width: 16),
               Expanded(
                 child: Row(
                   children: [
@@ -98,7 +98,7 @@ class JournalReviewPanel extends StatelessWidget {
                         onChanged: onEntryEmotionChanged,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: JournalComboField(
                         label: 'Exit Emotion',
@@ -112,8 +112,8 @@ class JournalReviewPanel extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          const JournalSectionLabel('Add a note or voice reflection'),
+          SizedBox(height: 14),
+          JournalSectionLabel('Add a note or voice reflection'),
           SizedBox(
             height: 170,
             child: TextBox(
@@ -131,14 +131,14 @@ class JournalReviewPanel extends StatelessWidget {
 class _PlanCheckbox extends StatelessWidget {
   final JournalReviewPanel panel;
 
-  const _PlanCheckbox(this.panel);
+  _PlanCheckbox(this.panel);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const JournalSectionLabel('Plan'),
+        JournalSectionLabel('Plan'),
         Row(
           children: [
             Checkbox(
@@ -149,7 +149,7 @@ class _PlanCheckbox extends StatelessWidget {
                 }
               },
             ),
-            const Expanded(child: Text('I followed my trade plan')),
+            Expanded(child: Text('I followed my trade plan')),
           ],
         ),
       ],
@@ -158,7 +158,7 @@ class _PlanCheckbox extends StatelessWidget {
 }
 
 class _TradeManagementField extends StatelessWidget {
-  const _TradeManagementField();
+  _TradeManagementField();
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +167,7 @@ class _TradeManagementField extends StatelessWidget {
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
-        children: const [
+        children: [
           JournalMiniTag('Partials 1R/2R'),
           JournalMiniTag('SL to BE'),
         ],
@@ -177,14 +177,14 @@ class _TradeManagementField extends StatelessWidget {
 }
 
 class _MistakesField extends StatelessWidget {
-  const _MistakesField();
+  _MistakesField();
 
   @override
   Widget build(BuildContext context) {
     return JournalFieldShell(
       label: 'Mistakes',
       child: Row(
-        children: const [
+        children: [
           JournalMiniTag('Added to Position', removable: true),
           Spacer(),
           Icon(FluentIcons.cancel, size: 14, color: AppColors.textSecondary),

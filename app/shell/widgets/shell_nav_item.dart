@@ -7,7 +7,7 @@ class ShellNavItem extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const ShellNavItem({
+  ShellNavItem({
     super.key,
     required this.icon,
     required this.label,
@@ -21,8 +21,8 @@ class ShellNavItem extends StatelessWidget {
       onPressed: onTap,
       builder: (context, states) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: selected ? AppColors.primarySoft : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
@@ -34,7 +34,7 @@ class ShellNavItem extends StatelessWidget {
                 size: 18,
                 color: selected ? AppColors.primary : AppColors.textSecondary,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 label,
                 style: TextStyle(

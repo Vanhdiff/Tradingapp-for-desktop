@@ -6,7 +6,7 @@ import 'journal_shared_widgets.dart';
 class JournalHeader extends StatelessWidget {
   final String title;
 
-  const JournalHeader({super.key, required this.title});
+  JournalHeader({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class JournalHeader extends StatelessWidget {
               Button(
                 onPressed: () {},
                 style: ButtonStyle(
-                  padding: const WidgetStatePropertyAll(
+                  padding: WidgetStatePropertyAll(
                     EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(FluentIcons.chevron_left, size: 12),
@@ -33,18 +33,18 @@ class JournalHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Row(
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  const JournalPill(
+                  SizedBox(width: 12),
+                  JournalPill(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -67,7 +67,7 @@ class JournalHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(18),
@@ -75,11 +75,11 @@ class JournalHeader extends StatelessWidget {
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.3),
                     blurRadius: 18,
-                    offset: const Offset(0, 8),
+                    offset: Offset(0, 8),
                   ),
                 ],
               ),
-              child: const Text(
+              child: Text(
                 'Log emotions + lessons instantly',
                 style: TextStyle(
                   color: Colors.white,
@@ -88,8 +88,8 @@ class JournalHeader extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-            const Row(
+            SizedBox(height: 8),
+            Row(
               children: [
                 JournalOutlineAction(
                   icon: FluentIcons.share,

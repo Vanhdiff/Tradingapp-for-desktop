@@ -5,15 +5,15 @@ import '../../../../shared/widgets/app_panel.dart';
 import 'journal_shared_widgets.dart';
 
 class JournalChartsPanel extends StatelessWidget {
-  const JournalChartsPanel({super.key});
+  JournalChartsPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppPanel(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Charts',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
@@ -44,7 +44,7 @@ class _ChartCard extends StatelessWidget {
   final String count;
   final bool withActions;
 
-  const _ChartCard(this.label, this.count, {this.withActions = false});
+  _ChartCard(this.label, this.count, {this.withActions = false});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _ChartCard extends StatelessWidget {
           height: 190,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: const Color(0xFF081018),
+            color: Color(0xFF081018),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: AppColors.border),
           ),
@@ -68,7 +68,7 @@ class _ChartCard extends StatelessWidget {
               if (withActions)
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 8,
                     ),
@@ -76,7 +76,7 @@ class _ChartCard extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.45),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Text(
+                    child: Text(
                       '+ Add file',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
@@ -87,12 +87,12 @@ class _ChartCard extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  padding: EdgeInsets.symmetric(vertical: 7),
                   color: Colors.black.withValues(alpha: 0.44),
                   alignment: Alignment.center,
                   child: Text(
                     count,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -111,7 +111,7 @@ class _ChartCard extends StatelessWidget {
 class _UploadChartCard extends StatelessWidget {
   final String label;
 
-  const _UploadChartCard(this.label);
+  _UploadChartCard(this.label);
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,7 @@ class _UploadChartCard extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.35),
             ),
           ),
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -184,7 +184,7 @@ class _ChartPreviewPainter extends CustomPainter {
     );
 
     final linePaint = Paint()
-      ..color = const Color(0xFF62B7FF)
+      ..color = Color(0xFF62B7FF)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
     final path = Path()

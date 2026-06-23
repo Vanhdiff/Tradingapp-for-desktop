@@ -6,18 +6,18 @@ import '../data/news_sample_data.dart';
 class NewsEventsPanel extends StatelessWidget {
   final List<NewsEventData> events;
 
-  const NewsEventsPanel({super.key, required this.events});
+  NewsEventsPanel({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: _panelDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               _NavButton(FluentIcons.chevron_left),
               SizedBox(width: 6),
               _NavButton(FluentIcons.chevron_right),
@@ -34,9 +34,9 @@ class NewsEventsPanel extends StatelessWidget {
               _TodayPill(),
             ],
           ),
-          const SizedBox(height: 14),
-          const _EventHeader(),
-          const SizedBox(height: 8),
+          SizedBox(height: 14),
+          _EventHeader(),
+          SizedBox(height: 8),
           ...events.map((event) => _EventRow(event)),
         ],
       ),
@@ -47,17 +47,17 @@ class NewsEventsPanel extends StatelessWidget {
 class UpcomingEventsPanel extends StatelessWidget {
   final List<NewsEventData> events;
 
-  const UpcomingEventsPanel({super.key, required this.events});
+  UpcomingEventsPanel({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: _panelDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Upcoming',
             style: TextStyle(
               fontSize: 18,
@@ -65,9 +65,9 @@ class UpcomingEventsPanel extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 14),
-          const _EventHeader(compact: true),
-          const SizedBox(height: 8),
+          SizedBox(height: 14),
+          _EventHeader(compact: true),
+          SizedBox(height: 8),
           ...events.map((event) => _EventRow(event, compact: true)),
         ],
       ),
@@ -78,16 +78,16 @@ class UpcomingEventsPanel extends StatelessWidget {
 class CurrencyWatchlistPanel extends StatelessWidget {
   final List<String> currencies;
 
-  const CurrencyWatchlistPanel({super.key, required this.currencies});
+  CurrencyWatchlistPanel({super.key, required this.currencies});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: _panelDecoration(),
       child: Row(
         children: [
-          const Text(
+          Text(
             'Currencies',
             style: TextStyle(
               fontSize: 20,
@@ -95,8 +95,8 @@ class CurrencyWatchlistPanel extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(width: 12),
-          const Text(
+          SizedBox(width: 12),
+          Text(
             '18 from watchlist',
             style: TextStyle(
               color: AppColors.textSecondary,
@@ -104,12 +104,12 @@ class CurrencyWatchlistPanel extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const Spacer(),
-          const Text(
+          Spacer(),
+          Text(
             'Clear',
             style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           ...currencies.map((currency) => _CurrencyChip(currency)),
         ],
       ),
@@ -120,17 +120,17 @@ class CurrencyWatchlistPanel extends StatelessWidget {
 class _EventHeader extends StatelessWidget {
   final bool compact;
 
-  const _EventHeader({this.compact = false});
+  _EventHeader({this.compact = false});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(width: 78, child: _HeaderText('Time')),
-        const SizedBox(width: 76, child: _HeaderText('Currency')),
-        const SizedBox(width: 62, child: _HeaderText('Impact')),
-        Expanded(flex: compact ? 4 : 5, child: const _HeaderText('Event')),
-        if (!compact) ...const [
+        SizedBox(width: 78, child: _HeaderText('Time')),
+        SizedBox(width: 76, child: _HeaderText('Currency')),
+        SizedBox(width: 62, child: _HeaderText('Impact')),
+        Expanded(flex: compact ? 4 : 5, child: _HeaderText('Event')),
+        if (!compact) ...[
           SizedBox(width: 78, child: _HeaderText('Actual')),
           SizedBox(width: 78, child: _HeaderText('Forecast')),
           SizedBox(width: 78, child: _HeaderText('Previous')),
@@ -144,13 +144,13 @@ class _EventRow extends StatelessWidget {
   final NewsEventData event;
   final bool compact;
 
-  const _EventRow(this.event, {this.compact = false});
+  _EventRow(this.event, {this.compact = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 9),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.symmetric(vertical: 9),
+      decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: Color(0xFFF0ECF7))),
       ),
       child: Row(
@@ -198,13 +198,13 @@ class _EventRow extends StatelessWidget {
 class _CurrencyChip extends StatelessWidget {
   final String currency;
 
-  const _CurrencyChip(this.currency);
+  _CurrencyChip(this.currency);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+      margin: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 9),
       decoration: BoxDecoration(
         color: currency == 'USD' ? AppColors.primarySoft : Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -223,8 +223,8 @@ class _CurrencyChip extends StatelessWidget {
                   : AppColors.textPrimary,
             ),
           ),
-          const SizedBox(width: 8),
-          const Icon(
+          SizedBox(width: 8),
+          Icon(
             FluentIcons.cancel,
             size: 10,
             color: AppColors.textSecondary,
@@ -238,13 +238,13 @@ class _CurrencyChip extends StatelessWidget {
 class _HeaderText extends StatelessWidget {
   final String text;
 
-  const _HeaderText(this.text);
+  _HeaderText(this.text);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textSecondary,
         fontSize: 10,
         fontWeight: FontWeight.w800,
@@ -258,7 +258,7 @@ class _CellText extends StatelessWidget {
   final bool strong;
   final Color? color;
 
-  const _CellText(this.text, {this.strong = false, this.color});
+  _CellText(this.text, {this.strong = false, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -276,18 +276,18 @@ class _CellText extends StatelessWidget {
 }
 
 class _TodayPill extends StatelessWidget {
-  const _TodayPill();
+  _TodayPill();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.shellBg,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border),
       ),
-      child: const Text(
+      child: Text(
         'Today',
         style: TextStyle(
           color: AppColors.textSecondary,
@@ -302,7 +302,7 @@ class _TodayPill extends StatelessWidget {
 class _NavButton extends StatelessWidget {
   final IconData icon;
 
-  const _NavButton(this.icon);
+  _NavButton(this.icon);
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +329,7 @@ BoxDecoration _panelDecoration() {
       BoxShadow(
         color: AppColors.primary.withValues(alpha: 0.04),
         blurRadius: 18,
-        offset: const Offset(0, 10),
+        offset: Offset(0, 10),
       ),
     ],
   );

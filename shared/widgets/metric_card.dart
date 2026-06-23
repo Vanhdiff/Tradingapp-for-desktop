@@ -8,7 +8,7 @@ class MetricCard extends StatelessWidget {
   final Color? valueColor;
   final Widget? trailing;
 
-  const MetricCard({
+  MetricCard({
     super.key,
     required this.title,
     required this.value,
@@ -21,11 +21,11 @@ class MetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEE8F8)),
+        border: Border.all(color: Color(0xFFEEE8F8)),
       ),
       child: Row(
         children: [
@@ -39,13 +39,13 @@ class MetricCard extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Text(
                   value,
                   maxLines: 1,
@@ -57,12 +57,12 @@ class MetricCard extends StatelessWidget {
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     subtitle!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -72,7 +72,7 @@ class MetricCard extends StatelessWidget {
             ),
           ),
           if (trailing != null) ...[
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             SizedBox(
               width: 36,
               height: 36,
