@@ -82,12 +82,12 @@ class NewsRemoteDataSource {
   }
 
   NewsEventData _eventFromJson(Map<String, dynamic> json) {
-    final time = DateTime.parse(json['time'] as String);
+    final time = DateTime.parse(json['time'] as String).toLocal();
     final impact = json['impact'] as String;
     return NewsEventData(
       id: json['id'] as String? ?? '',
       time:
-          '+ ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}',
+          '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}',
       currency: '${_flag(json['currency'] as String)} ${json['currency']}',
       impactColor: switch (impact) {
         'high' => AppColors.danger,
@@ -95,10 +95,15 @@ class NewsRemoteDataSource {
         _ => AppColors.textSecondary,
       },
       event: json['event'] as String,
-      actual: json['actual'] as String? ?? '',
-      forecast: json['forecast'] as String? ?? '',
-      previous: json['previous'] as String? ?? '',
+      actual: _valueOrDash(json['actual'] as String?),
+      forecast: _valueOrDash(json['forecast'] as String?),
+      previous: _valueOrDash(json['previous'] as String?),
     );
+  }
+
+  String _valueOrDash(String? value) {
+    final normalized = value?.trim() ?? '';
+    return normalized.isEmpty ? '-' : normalized;
   }
 
   String _flag(String currency) {

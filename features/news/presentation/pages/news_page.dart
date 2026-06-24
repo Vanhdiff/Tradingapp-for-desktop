@@ -16,9 +16,9 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   bool _showListNotice = false;
   late DateTime _visibleMonth;
-  List<CalendarDayData> _calendarDays = NewsSampleData.calendarDays;
-  List<NewsEventData> _upcomingEvents = NewsSampleData.upcomingEvents;
-  List<NewsEventData> _selectedDayEvents = NewsSampleData.todayEvents;
+  late List<CalendarDayData> _calendarDays;
+  List<NewsEventData> _upcomingEvents = const [];
+  List<NewsEventData> _selectedDayEvents = const [];
   String _selectedDayTitle = 'Today';
   String? _errorMessage;
 
@@ -29,6 +29,7 @@ class _NewsPageState extends State<NewsPage> {
     super.initState();
     final now = DateTime.now();
     _visibleMonth = DateTime(now.year, now.month);
+    _calendarDays = _buildCalendarGrid(_visibleMonth);
     _selectedDayTitle = _dayTitle(now);
     _loadNews();
   }
@@ -97,6 +98,8 @@ class _NewsPageState extends State<NewsPage> {
                                 visibleMonth: _visibleMonth,
                                 days: _calendarDays,
                                 onDaySelected: _selectDay,
+                                onPreviousMonth: () => _changeMonth(-1),
+                                onNextMonth: () => _changeMonth(1),
                               ),
                               SizedBox(height: 14),
                               UpcomingEventsPanel(events: _upcomingEvents),
@@ -148,13 +151,30 @@ class _NewsPageState extends State<NewsPage> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _calendarDays = NewsSampleData.calendarDays;
-        _upcomingEvents = NewsSampleData.upcomingEvents;
-        _selectedDayEvents = NewsSampleData.todayEvents;
+        _calendarDays = _buildCalendarGrid(_visibleMonth);
+        _upcomingEvents = const [];
+        _selectedDayEvents = const [];
         _errorMessage =
             'News backend offline - showing sample economic calendar';
       });
     }
+  }
+
+  void _changeMonth(int offset) {
+    final nextMonth = DateTime(
+      _visibleMonth.year,
+      _visibleMonth.month + offset,
+    );
+
+    setState(() {
+      _visibleMonth = nextMonth;
+      _calendarDays = _buildCalendarGrid(nextMonth);
+      _showListNotice = false;
+      _selectedDayTitle = _monthTitle(nextMonth);
+      _selectedDayEvents = const [];
+    });
+
+    _loadNews();
   }
 
   Future<void> _selectDay(CalendarDayData day) async {
@@ -172,7 +192,7 @@ class _NewsPageState extends State<NewsPage> {
       setState(() => _selectedDayEvents = events);
     } catch (_) {
       if (!mounted) return;
-      setState(() => _selectedDayEvents = NewsSampleData.todayEvents);
+      setState(() => _selectedDayEvents = const []);
     }
   }
 
@@ -199,5 +219,45 @@ class _NewsPageState extends State<NewsPage> {
       'Dec',
     ];
     return '${weekdays[value.weekday - 1]}, ${months[value.month - 1]} ${value.day}';
+  }
+
+  String _monthTitle(DateTime value) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return '${months[value.month - 1]} ${value.year}';
+  }
+
+  List<CalendarDayData> _buildCalendarGrid(DateTime visibleMonth) {
+    final firstDay = DateTime(visibleMonth.year, visibleMonth.month);
+    final leadingDays = firstDay.weekday - DateTime.monday;
+    final todayKey = _dateKey(DateTime.now());
+
+    return List.generate(42, (index) {
+      final date = DateTime(
+        visibleMonth.year,
+        visibleMonth.month,
+        1 - leadingDays + index,
+      );
+      final dateKey = _dateKey(date);
+
+      return CalendarDayData(
+        day: date.day,
+        dateKey: dateKey,
+        isToday: dateKey == todayKey,
+        isMuted: date.month != visibleMonth.month,
+      );
+    });
   }
 }

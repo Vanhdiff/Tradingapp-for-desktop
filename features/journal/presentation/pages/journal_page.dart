@@ -30,8 +30,8 @@ class _JournalPageState extends State<JournalPage> {
   int? _selectedCalendarDayIndex;
   int? _selectedTradeIndex;
   late DateTime _visibleMonth;
-  List<JournalCalendarDay> _calendarDays = JournalSampleData.calendarDays;
-  List<JournalOverviewTrade> _overviewTrades = JournalSampleData.overviewTrades;
+  List<JournalCalendarDay> _calendarDays = const [];
+  List<JournalOverviewTrade> _overviewTrades = const [];
   JournalMonthSummary _monthSummary = JournalMonthSummary.sample();
   List<JournalWeekSummary> _weekSummary = [
     JournalWeekSummary.sample(1, 640),
@@ -51,6 +51,9 @@ class _JournalPageState extends State<JournalPage> {
     super.initState();
     final now = DateTime.now();
     _visibleMonth = DateTime(now.year, now.month);
+    _calendarDays = _buildJournalCalendarGrid(_visibleMonth);
+    _selectedCalendarDayIndex = _defaultSelectedDayIndex(_calendarDays);
+    _daySummary = _emptyDaySummary(_dateKey(now));
     _loadJournalOverview();
   }
 
@@ -100,6 +103,8 @@ class _JournalPageState extends State<JournalPage> {
                           onCalendarDaySelected: (index) {
                             _selectCalendarDay(index);
                           },
+                          onPreviousMonth: () => _changeVisibleMonth(-1),
+                          onNextMonth: () => _changeVisibleMonth(1),
                           selectedTradeIndex: _selectedTradeIndex,
                           onTradeClicked: (index) {
                             setState(() => _selectedTradeIndex = index);
@@ -259,10 +264,42 @@ class _JournalPageState extends State<JournalPage> {
     } catch (error) {
       if (!mounted) return;
       setState(() {
+        _calendarDays = _buildJournalCalendarGrid(_visibleMonth);
+        _selectedCalendarDayIndex = _defaultSelectedDayIndex(_calendarDays);
+        _daySummary = _emptyDaySummary(
+          _selectedCalendarDayIndex == null
+              ? _dateKey(DateTime(_visibleMonth.year, _visibleMonth.month))
+              : _calendarDays[_selectedCalendarDayIndex!].dateKey!,
+        );
+        _overviewTrades = const [];
         _isLoadingOverview = false;
         _overviewError = 'Backend offline - showing sample journal data';
       });
     }
+  }
+
+  void _changeVisibleMonth(int offset) {
+    final nextMonth = DateTime(
+      _visibleMonth.year,
+      _visibleMonth.month + offset,
+    );
+    final days = _buildJournalCalendarGrid(nextMonth);
+    final selectedIndex = _defaultSelectedDayIndex(days);
+    final selectedDateKey = selectedIndex == null
+        ? _dateKey(DateTime(nextMonth.year, nextMonth.month))
+        : days[selectedIndex].dateKey!;
+
+    setState(() {
+      _visibleMonth = nextMonth;
+      _calendarDays = days;
+      _selectedCalendarDayIndex = selectedIndex;
+      _selectedTradeIndex = null;
+      _showTradeDetail = false;
+      _daySummary = _emptyDaySummary(selectedDateKey);
+      _overviewTrades = const [];
+    });
+
+    _loadJournalOverview();
   }
 
   Future<void> _selectCalendarDay(int index) async {
@@ -286,8 +323,8 @@ class _JournalPageState extends State<JournalPage> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _daySummary = JournalDaySummary.sample();
-        _overviewTrades = JournalSampleData.overviewTrades;
+        _daySummary = _emptyDaySummary(dateKey);
+        _overviewTrades = const [];
       });
     }
   }
@@ -300,6 +337,39 @@ class _JournalPageState extends State<JournalPage> {
       (day) => !day.isMuted && day.tradeCount > 0,
     );
     return tradeIndex == -1 ? null : tradeIndex;
+  }
+
+  List<JournalCalendarDay> _buildJournalCalendarGrid(DateTime visibleMonth) {
+    final firstDay = DateTime(visibleMonth.year, visibleMonth.month);
+    final leadingDays = firstDay.weekday - DateTime.monday;
+
+    return List.generate(42, (index) {
+      final date = DateTime(
+        visibleMonth.year,
+        visibleMonth.month,
+        1 - leadingDays + index,
+      );
+
+      return JournalCalendarDay(
+        day: date.day,
+        dateKey: _dateKey(date),
+        isMuted: date.month != visibleMonth.month,
+      );
+    });
+  }
+
+  JournalDaySummary _emptyDaySummary(String dateKey) {
+    return JournalDaySummary(
+      dateKey: dateKey,
+      netPnl: 0,
+      returnPercent: 0,
+      expectancy: 0,
+      tradeCount: 0,
+      ruleBreakCount: 0,
+      maxDailyLossUsed: 0,
+      disciplineScore: 0,
+      trades: const [],
+    );
   }
 
   String _dateKey(DateTime value) {
@@ -320,6 +390,8 @@ class _JournalOverview extends StatelessWidget {
   final bool isLoading;
   final String? errorMessage;
   final ValueChanged<int> onCalendarDaySelected;
+  final VoidCallback onPreviousMonth;
+  final VoidCallback onNextMonth;
   final int? selectedTradeIndex;
   final ValueChanged<int> onTradeClicked;
   final ValueChanged<int> onTradeSelected;
@@ -335,6 +407,8 @@ class _JournalOverview extends StatelessWidget {
     required this.isLoading,
     required this.errorMessage,
     required this.onCalendarDaySelected,
+    required this.onPreviousMonth,
+    required this.onNextMonth,
     required this.selectedTradeIndex,
     required this.onTradeClicked,
     required this.onTradeSelected,
@@ -356,6 +430,8 @@ class _JournalOverview extends StatelessWidget {
                 days: calendarDays,
                 selectedDayIndex: selectedCalendarDayIndex,
                 onDaySelected: onCalendarDaySelected,
+                onPreviousMonth: onPreviousMonth,
+                onNextMonth: onNextMonth,
               ),
               SizedBox(height: 16),
               Row(
@@ -488,12 +564,16 @@ class _JournalCalendarPanel extends StatelessWidget {
   final List<JournalCalendarDay> days;
   final int? selectedDayIndex;
   final ValueChanged<int> onDaySelected;
+  final VoidCallback onPreviousMonth;
+  final VoidCallback onNextMonth;
 
   const _JournalCalendarPanel({
     required this.visibleMonth,
     required this.days,
     required this.selectedDayIndex,
     required this.onDaySelected,
+    required this.onPreviousMonth,
+    required this.onNextMonth,
   });
 
   @override
@@ -504,9 +584,9 @@ class _JournalCalendarPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              _NavButton(FluentIcons.chevron_left),
+              _NavButton(FluentIcons.chevron_left, onPressed: onPreviousMonth),
               SizedBox(width: 6),
-              _NavButton(FluentIcons.chevron_right),
+              _NavButton(FluentIcons.chevron_right, onPressed: onNextMonth),
               SizedBox(width: 12),
               Text(
                 _monthTitle(visibleMonth),
@@ -1368,21 +1448,25 @@ class _IconSquare extends StatelessWidget {
 
 class _NavButton extends StatelessWidget {
   final IconData icon;
+  final VoidCallback? onPressed;
 
-  const _NavButton(this.icon);
+  const _NavButton(this.icon, {this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 28,
-      height: 28,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.surfaceAlt,
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: AppColors.border),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 28,
+        height: 28,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.surfaceAlt,
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Icon(icon, size: 12, color: AppColors.textSecondary),
       ),
-      child: Icon(icon, size: 12, color: AppColors.textSecondary),
     );
   }
 }

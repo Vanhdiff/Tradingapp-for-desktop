@@ -1,9 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../app/theme/app_colors.dart';
-import '../../../mt5/data/datasources/mt5_remote_datasource.dart';
-import '../../../mt5/domain/entities/mt5_account.dart';
-import '../../../mt5/domain/entities/mt5_performance_summary.dart';
-import '../../../mt5/domain/entities/mt5_position.dart';
 import '../models/dashboard_mt5_snapshot.dart';
 import '../widgets/dashboard_top_metrics.dart';
 import '../widgets/discipline_panel.dart';
@@ -19,16 +15,14 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final Mt5RemoteDataSource _mt5RemoteDataSource = Mt5RemoteDataSource();
-
-  DashboardMt5Snapshot _snapshot = DashboardMt5Snapshot.sample();
-  bool _isLoading = true;
-  String? _errorMessage;
+  final DashboardMt5Snapshot _snapshot = DashboardMt5Snapshot.sample();
+  final bool _isLoading = false;
+  final String _errorMessage =
+      'Backend is being restructured - showing sample analytics';
 
   @override
   void initState() {
     super.initState();
-    _loadMt5Snapshot();
   }
 
   @override
@@ -101,38 +95,6 @@ class _DashboardPageState extends State<DashboardPage> {
       },
     );
   }
-
-  Future<void> _loadMt5Snapshot() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      final results = await Future.wait([
-        _mt5RemoteDataSource.fetchAccount(),
-        _mt5RemoteDataSource.fetchPositions(),
-        _mt5RemoteDataSource.fetchPerformanceSummary(period: 'month'),
-      ]);
-
-      if (!mounted) return;
-      setState(() {
-        _snapshot = DashboardMt5Snapshot.fromMt5(
-          account: results[0] as Mt5Account,
-          positions: results[1] as List<Mt5Position>,
-          summary: results[2] as Mt5PerformanceSummary,
-        );
-        _isLoading = false;
-      });
-    } catch (error) {
-      if (!mounted) return;
-      setState(() {
-        _snapshot = DashboardMt5Snapshot.sample();
-        _isLoading = false;
-        _errorMessage = 'MT5 backend offline - showing sample analytics';
-      });
-    }
-  }
 }
 
 class _DashboardHeader extends StatelessWidget {
@@ -174,10 +136,10 @@ class _DashboardHeader extends StatelessWidget {
 
   String get _subtitle {
     if (isLoading) {
-      return 'Loading MT5 account, positions, and performance analytics...';
+      return 'Loading trading account, positions, and performance analytics...';
     }
     if (errorMessage != null) return errorMessage!;
-    return 'MT5 analytics connected — account, risk, and performance are calculated from broker data.';
+    return 'Trading analytics connected - account, risk, and performance are calculated from broker data.';
   }
 }
 

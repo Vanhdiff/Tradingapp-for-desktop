@@ -1,7 +1,3 @@
-import '../../../mt5/domain/entities/mt5_account.dart';
-import '../../../mt5/domain/entities/mt5_performance_summary.dart';
-import '../../../mt5/domain/entities/mt5_position.dart';
-
 class DashboardMt5Snapshot {
   final double accountBalance;
   final double equity;
@@ -48,62 +44,6 @@ class DashboardMt5Snapshot {
     required this.bestSymbol,
     required this.worstSymbol,
   });
-
-  factory DashboardMt5Snapshot.fromMt5({
-    required Mt5Account account,
-    required List<Mt5Position> positions,
-    required Mt5PerformanceSummary summary,
-  }) {
-    final openPnl = positions.fold<double>(
-      0,
-      (total, position) => total + position.profit,
-    );
-    final tradeCount = summary.tradeCount == 0 ? 1 : summary.tradeCount;
-    final avgR = summary.netPnl / tradeCount / 100;
-    final maxDailyLoss = account.balance * 0.02;
-    final dailyTarget = account.balance * 0.04;
-    final todayClosedPnl = summary.netPnl;
-    final maxLossReached = todayClosedPnl <= -maxDailyLoss;
-    final performanceScore = summary.profitFactor >= 2
-        ? 36
-        : (summary.profitFactor * 18).clamp(0, 40).round();
-    final consistencyScore = (100 - summary.maxDrawdown * 7)
-        .clamp(0, 20)
-        .round();
-    final maxLossViolations = maxLossReached ? 1 : 0;
-    final profitTargetViolations = todayClosedPnl >= dailyTarget ? 0 : 1;
-    final disciplineScore =
-        (100 -
-                maxLossViolations * 18 -
-                profitTargetViolations * 8 -
-                (positions.length > 5 ? 10 : 0))
-            .clamp(0, 100)
-            .round();
-
-    return DashboardMt5Snapshot(
-      accountBalance: account.balance,
-      equity: account.equity,
-      totalClosedPnl: summary.netPnl,
-      winRate: summary.winRate,
-      avgRPerTrade: avgR,
-      bestR: 2.33,
-      worstR: -1.00,
-      profitFactor: summary.profitFactor,
-      todayTradeCount: positions.length,
-      maxTradesPerDay: 5,
-      todayClosedPnl: todayClosedPnl + openPnl,
-      maxDailyLoss: maxDailyLoss,
-      dailyTarget: dailyTarget,
-      disciplineScore: disciplineScore,
-      performanceScore: performanceScore,
-      consistencyScore: consistencyScore,
-      maxLossViolations: maxLossViolations,
-      profitTargetViolations: profitTargetViolations,
-      maxLossReached: maxLossReached,
-      bestSymbol: summary.bestSymbol,
-      worstSymbol: summary.worstSymbol,
-    );
-  }
 
   factory DashboardMt5Snapshot.sample() {
     return const DashboardMt5Snapshot(

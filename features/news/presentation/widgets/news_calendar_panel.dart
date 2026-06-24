@@ -7,12 +7,16 @@ class NewsCalendarPanel extends StatelessWidget {
   final List<CalendarDayData> days;
   final DateTime visibleMonth;
   final ValueChanged<CalendarDayData>? onDaySelected;
+  final VoidCallback? onPreviousMonth;
+  final VoidCallback? onNextMonth;
 
   const NewsCalendarPanel({
     super.key,
     required this.days,
     required this.visibleMonth,
     this.onDaySelected,
+    this.onPreviousMonth,
+    this.onNextMonth,
   });
 
   @override
@@ -23,7 +27,11 @@ class NewsCalendarPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _CalendarHeader(visibleMonth: visibleMonth),
+          _CalendarHeader(
+            visibleMonth: visibleMonth,
+            onPreviousMonth: onPreviousMonth,
+            onNextMonth: onNextMonth,
+          ),
           SizedBox(height: 14),
           _WeekdayHeader(),
           SizedBox(height: 8),
@@ -58,16 +66,22 @@ class NewsCalendarPanel extends StatelessWidget {
 
 class _CalendarHeader extends StatelessWidget {
   final DateTime visibleMonth;
+  final VoidCallback? onPreviousMonth;
+  final VoidCallback? onNextMonth;
 
-  const _CalendarHeader({required this.visibleMonth});
+  const _CalendarHeader({
+    required this.visibleMonth,
+    this.onPreviousMonth,
+    this.onNextMonth,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _NavButton(FluentIcons.chevron_left),
+        _NavButton(FluentIcons.chevron_left, onPressed: onPreviousMonth),
         SizedBox(width: 6),
-        _NavButton(FluentIcons.chevron_right),
+        _NavButton(FluentIcons.chevron_right, onPressed: onNextMonth),
         SizedBox(width: 12),
         Text(
           _monthTitle(visibleMonth),
@@ -296,21 +310,25 @@ class _LegendDot extends StatelessWidget {
 
 class _NavButton extends StatelessWidget {
   final IconData icon;
+  final VoidCallback? onPressed;
 
-  const _NavButton(this.icon);
+  const _NavButton(this.icon, {this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 26,
-      height: 26,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.shellBg,
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: AppColors.border),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 26,
+        height: 26,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.shellBg,
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Icon(icon, size: 12, color: AppColors.textSecondary),
       ),
-      child: Icon(icon, size: 12, color: AppColors.textSecondary),
     );
   }
 }

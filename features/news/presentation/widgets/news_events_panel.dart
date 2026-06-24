@@ -42,7 +42,10 @@ class NewsEventsPanel extends StatelessWidget {
           SizedBox(height: 14),
           _EventHeader(),
           SizedBox(height: 8),
-          ...events.map((event) => _EventRow(event)),
+          if (events.isEmpty)
+            _EmptyEventsMessage('No economic events for this day.')
+          else
+            ...events.map((event) => _EventRow(event)),
         ],
       ),
     );
@@ -73,7 +76,10 @@ class UpcomingEventsPanel extends StatelessWidget {
           SizedBox(height: 14),
           _EventHeader(compact: true),
           SizedBox(height: 8),
-          ...events.map((event) => _EventRow(event, compact: true)),
+          if (events.isEmpty)
+            _EmptyEventsMessage('No upcoming economic events from MT5.')
+          else
+            ...events.map((event) => _EventRow(event, compact: true)),
         ],
       ),
     );
@@ -186,15 +192,44 @@ class _EventRow extends StatelessWidget {
               child: _CellText(
                 event.actual,
                 strong: true,
-                color: event.actual.startsWith('-')
-                    ? AppColors.danger
-                    : AppColors.success,
+                color: _actualColor(event.actual),
               ),
             ),
             SizedBox(width: 78, child: _CellText(event.forecast)),
             SizedBox(width: 78, child: _CellText(event.previous)),
           ],
         ],
+      ),
+    );
+  }
+
+  Color? _actualColor(String value) {
+    if (value == '-') return null;
+    return value.startsWith('-') ? AppColors.danger : AppColors.success;
+  }
+}
+
+class _EmptyEventsMessage extends StatelessWidget {
+  final String message;
+
+  const _EmptyEventsMessage(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 18),
+      alignment: Alignment.centerLeft,
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.border)),
+      ),
+      child: Text(
+        message,
+        style: TextStyle(
+          color: AppColors.textSecondary,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
