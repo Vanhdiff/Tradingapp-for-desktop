@@ -3,12 +3,16 @@ import '../../presentation/data/journal_sample_data.dart';
 
 class JournalRemoteDataSource {
   final ApiClient _apiClient;
+  final int accountId;
 
-  JournalRemoteDataSource({ApiClient? apiClient})
+  JournalRemoteDataSource({ApiClient? apiClient, this.accountId = 1})
     : _apiClient = apiClient ?? ApiClient();
 
   Future<List<JournalOverviewTrade>> fetchTrades() async {
-    final response = await _apiClient.getJson('/journal/trades');
+    final response = await _apiClient.getJson(
+      '/trades',
+      queryParameters: {'account_id': '$accountId'},
+    );
     final items = response as List<dynamic>;
 
     return items.map((item) {
@@ -20,9 +24,9 @@ class JournalRemoteDataSource {
         id: json['id'] as int,
         symbol: json['symbol'] as String,
         direction: direction,
-        pnl: (json['pnl'] as num).toDouble(),
-        rMultiple: (json['r_multiple'] as num).toDouble(),
-        lots: (json['lot_size'] as num).toDouble(),
+        pnl: (json['net_pnl'] as num).toDouble(),
+        rMultiple: ((json['r_multiple'] ?? 0) as num).toDouble(),
+        lots: (json['volume'] as num).toDouble(),
         time: _formatTime(openedAt),
         setup: json['setup'] as String? ?? '',
         status: _titleCase(json['status'] as String),
@@ -35,16 +39,21 @@ class JournalRemoteDataSource {
     required int month,
   }) async {
     final response = await _apiClient.getJson(
-      '/mt5/journal/calendar',
-      queryParameters: {'year': '$year', 'month': '$month'},
+      '/journal/calendar',
+      queryParameters: {
+        'account_id': '$accountId',
+        'month': _monthKey(year, month),
+      },
     );
-    final items = response as List<dynamic>;
+    final items = (response as Map<String, dynamic>)['days'] as List<dynamic>;
     final tradeDays = <int, Map<String, dynamic>>{};
 
     for (final item in items) {
       final json = item as Map<String, dynamic>;
       final date = DateTime.parse(json['date'] as String);
-      tradeDays[date.day] = json;
+      if (date.month == month) {
+        tradeDays[date.day] = json;
+      }
     }
 
     return _buildMonthGrid(year: year, month: month, tradeDays: tradeDays);
@@ -80,21 +89,34 @@ class JournalRemoteDataSource {
   }) async {
     final response =
         await _apiClient.getJson(
-              '/mt5/journal/month-summary',
-              queryParameters: {'year': '$year', 'month': '$month'},
+              '/journal/month-summary',
+              queryParameters: {
+                'account_id': '$accountId',
+                'month': _monthKey(year, month),
+              },
             )
             as Map<String, dynamic>;
+    final summary = response['summary'] as Map<String, dynamic>;
+    final tradeCount = (summary['trade_count'] as num?)?.toInt() ?? 0;
+    final netPnl = ((summary['net_pnl'] ?? 0) as num).toDouble();
+    final mistakes = (response['mistake_frequency'] as List<dynamic>? ?? [])
+        .fold<int>(0, (total, item) {
+          final json = item as Map<String, dynamic>;
+          return total + ((json['count'] ?? 0) as num).toInt();
+        });
+    final weekly = response['weekly_breakdown'] as List<dynamic>? ?? [];
 
     return JournalMonthSummary(
-      expectancy: (response['expectancy'] as num).toDouble(),
-      winRate: (response['win_rate'] as num).toDouble(),
-      avgWin: (response['avg_win'] as num).toDouble(),
-      avgLoss: (response['avg_loss'] as num).toDouble(),
-      netPnl: (response['net_pnl'] as num).toDouble(),
-      mistakes: response['mistakes'] as int,
-      weeklyPnl: (response['weekly_pnl'] as List<dynamic>)
-          .map((item) => (item as num).toDouble())
-          .toList(),
+      expectancy: tradeCount == 0 ? 0 : netPnl / tradeCount,
+      winRate: ((summary['win_rate'] ?? 0) as num).toDouble(),
+      avgWin: 0,
+      avgLoss: 0,
+      netPnl: netPnl,
+      mistakes: mistakes,
+      weeklyPnl: weekly.map((item) {
+        final json = item as Map<String, dynamic>;
+        return ((json['net_pnl'] ?? 0) as num).toDouble();
+      }).toList(),
     );
   }
 
@@ -104,18 +126,23 @@ class JournalRemoteDataSource {
   }) async {
     final response =
         await _apiClient.getJson(
-              '/mt5/journal/week-summary',
-              queryParameters: {'year': '$year', 'month': '$month'},
+              '/journal/month-summary',
+              queryParameters: {
+                'account_id': '$accountId',
+                'month': _monthKey(year, month),
+              },
             )
-            as List<dynamic>;
+            as Map<String, dynamic>;
+    final items = response['weekly_breakdown'] as List<dynamic>? ?? [];
 
-    return response.map((item) {
+    return items.map((item) {
       final json = item as Map<String, dynamic>;
+      final period = json['period'] as String? ?? 'W0';
       return JournalWeekSummary(
-        week: json['week'] as int,
-        pnl: (json['pnl'] as num).toDouble(),
-        tradeCount: json['trade_count'] as int,
-        winRate: (json['win_rate'] as num).toDouble(),
+        week: int.tryParse(period.split('W').last) ?? 0,
+        pnl: ((json['net_pnl'] ?? 0) as num).toDouble(),
+        tradeCount: ((json['trade_count'] ?? 0) as num).toInt(),
+        winRate: ((json['win_rate'] ?? 0) as num).toDouble(),
       );
     }).toList();
   }
@@ -123,10 +150,11 @@ class JournalRemoteDataSource {
   Future<JournalDaySummary> fetchDaySummary({required String dateKey}) async {
     final response =
         await _apiClient.getJson(
-              '/mt5/journal/day-summary',
-              queryParameters: {'date': dateKey},
+              '/journal/day',
+              queryParameters: {'account_id': '$accountId', 'date': dateKey},
             )
             as Map<String, dynamic>;
+    final summary = response['summary'] as Map<String, dynamic>;
 
     final trades = (response['trades'] as List<dynamic>).map((item) {
       final json = item as Map<String, dynamic>;
@@ -134,11 +162,11 @@ class JournalRemoteDataSource {
       final openedAt = DateTime.parse(json['opened_at'] as String);
 
       return JournalOverviewTrade(
-        id: json['ticket'] as int,
+        id: json['id'] as int,
         symbol: json['symbol'] as String,
         direction: direction,
-        pnl: (json['pnl'] as num).toDouble(),
-        rMultiple: (json['r_multiple'] as num).toDouble(),
+        pnl: (json['net_pnl'] as num).toDouble(),
+        rMultiple: ((json['r_multiple'] ?? 0) as num).toDouble(),
         lots: (json['volume'] as num).toDouble(),
         time: _formatTime(openedAt),
         setup: json['setup'] as String? ?? '',
@@ -148,13 +176,13 @@ class JournalRemoteDataSource {
 
     return JournalDaySummary(
       dateKey: response['date'] as String,
-      netPnl: (response['net_pnl'] as num).toDouble(),
-      returnPercent: (response['return_percent'] as num).toDouble(),
-      expectancy: (response['expectancy'] as num).toDouble(),
-      tradeCount: response['trade_count'] as int,
-      ruleBreakCount: response['rule_break_count'] as int,
-      maxDailyLossUsed: (response['max_daily_loss_used'] as num).toDouble(),
-      disciplineScore: (response['discipline_score'] as num).toDouble(),
+      netPnl: ((summary['net_pnl'] ?? 0) as num).toDouble(),
+      returnPercent: 0,
+      expectancy: ((summary['average_r'] ?? 0) as num).toDouble(),
+      tradeCount: ((summary['trade_count'] ?? 0) as num).toInt(),
+      ruleBreakCount: 0,
+      maxDailyLossUsed: 0,
+      disciplineScore: 0,
       trades: trades,
     );
   }
@@ -174,5 +202,9 @@ class JournalRemoteDataSource {
     final month = value.month.toString().padLeft(2, '0');
     final day = value.day.toString().padLeft(2, '0');
     return '${value.year}-$month-$day';
+  }
+
+  static String _monthKey(int year, int month) {
+    return '$year-${month.toString().padLeft(2, '0')}';
   }
 }

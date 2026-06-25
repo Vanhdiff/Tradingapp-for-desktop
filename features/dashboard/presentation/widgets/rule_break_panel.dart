@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../guardrails/presentation/widgets/guardrails_dialog.dart';
 import '../models/dashboard_mt5_snapshot.dart';
 
 class RuleBreakPanel extends StatelessWidget {
@@ -62,18 +63,21 @@ class _PanelHeader extends StatelessWidget {
           constraints: BoxConstraints(minWidth: 190, maxWidth: 280),
           child: _PanelTitle(),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.primarySoft,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Text(
-            'Modify guardrails',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
+        GestureDetector(
+          onTap: () => showGuardrailsDialog(context),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.primarySoft,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              'Modify guardrails',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary,
+              ),
             ),
           ),
         ),

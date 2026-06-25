@@ -18,12 +18,30 @@ class ApiClient {
     return _sendJson('GET', path, queryParameters: queryParameters);
   }
 
-  Future<dynamic> postJson(String path, Map<String, dynamic> body) {
-    return _sendJson('POST', path, body: body);
+  Future<dynamic> postJson(
+    String path,
+    Map<String, dynamic> body, {
+    Map<String, String>? queryParameters,
+  }) {
+    return _sendJson(
+      'POST',
+      path,
+      queryParameters: queryParameters,
+      body: body,
+    );
   }
 
-  Future<dynamic> patchJson(String path, Map<String, dynamic> body) {
-    return _sendJson('PATCH', path, body: body);
+  Future<dynamic> patchJson(
+    String path,
+    Map<String, dynamic> body, {
+    Map<String, String>? queryParameters,
+  }) {
+    return _sendJson(
+      'PATCH',
+      path,
+      queryParameters: queryParameters,
+      body: body,
+    );
   }
 
   Future<void> delete(String path) async {

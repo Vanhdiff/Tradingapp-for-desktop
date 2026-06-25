@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../guardrails/presentation/widgets/guardrails_dialog.dart';
 
 class NewsHeader extends StatelessWidget {
   final NewsViewMode selectedMode;
@@ -53,7 +54,11 @@ class _HeaderActions extends StatelessWidget {
           onTap: () => onModeChanged(NewsViewMode.calendar),
         ),
         SizedBox(width: 8),
-        _ModeButton(icon: FluentIcons.lock, label: 'Block Trading Settings'),
+        _ModeButton(
+          icon: FluentIcons.lock,
+          label: 'Block Trading Settings',
+          onTap: () => showGuardrailsDialog(context),
+        ),
         SizedBox(width: 8),
         _IconButton(FluentIcons.refresh),
       ],

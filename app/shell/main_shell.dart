@@ -9,6 +9,7 @@ import '../../features/journal/presentation/pages/journal_page.dart';
 import '../../features/plan/presentation/pages/plan_page.dart';
 import '../../features/notebook/presentation/pages/notebook_page.dart';
 import '../../features/news/presentation/pages/news_page.dart';
+import '../../features/guardrails/presentation/pages/guardrails_page.dart';
 import 'widgets/shell_sidebar.dart';
 import 'widgets/shell_topbar.dart';
 import 'widgets/theme_picker_bar.dart';
@@ -95,6 +96,8 @@ class _MainShellState extends State<MainShell> {
         return 'Notebook';
       case RouteNames.news:
         return 'News';
+      case RouteNames.guardrails:
+        return 'Guardrails';
       default:
         return 'Trading Desk';
     }
@@ -112,6 +115,8 @@ class _MainShellState extends State<MainShell> {
         return NotebookPage();
       case RouteNames.news:
         return NewsPage();
+      case RouteNames.guardrails:
+        return GuardrailsPage();
       default:
         return DashboardPage();
     }

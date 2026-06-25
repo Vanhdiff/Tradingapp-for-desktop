@@ -28,6 +28,12 @@ abstract class AppNavItems {
       route: RouteNames.news,
       icon: FluentIcons.news,
     ),
+    AppNavItem(
+      key: 'guardrails',
+      label: 'Guardrails',
+      route: RouteNames.guardrails,
+      icon: FluentIcons.shield,
+    ),
   ];
 
   static const List<AppNavItem> utilities = [
